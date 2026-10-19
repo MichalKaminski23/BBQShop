@@ -1,0 +1,68 @@
+# Całość:        docker compose up --build
+# Tylko bazy:    docker compose up postgres mongo
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: bbq
+      POSTGRES_PASSWORD: bbq
+      POSTGRES_DB: bbqshop
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bbq -d bbqshop"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  mongo:
+    image: mongo:8
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: packages/api/Dockerfile
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      BBQ_POSTGRES_DSN: postgresql+asyncpg://bbq:bbq@postgres:5432/bbqshop
+      BBQ_MONGO_URI: mongodb://mongo:27017
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+
+  frontend:
+    image: node:24-alpine
+    working_dir: /app
+    command: sh -c "npm ci && npm run dev -- --host 0.0.0.0"
+    environment:
+      VITE_API_URL: http://api:8000
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - frontend-node-modules:/app/node_modules
+    depends_on:
+      - api
+
+volumes:
+  postgres-data:
+  mongo-data:
+  frontend-node-modules:

@@ -1,0 +1,65 @@
+[project]
+name = "bbqshop"
+version = "0.1.0"
+description = "Edukacyjny sklep BBQ z celowymi podatnościami i ich poprawionymi wersjami (TBO)."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "bbq-api",
+    "bbq-core",
+    "bbq-sqli",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "mypy>=1.13",
+    "pre-commit>=4.0",
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.8",
+    "testcontainers[mongodb,postgres]>=4.8",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.workspace]
+members = ["packages/*"]
+
+[tool.uv.sources]
+bbq-api = { workspace = true }
+bbq-core = { workspace = true }
+bbq-sqli = { workspace = true }
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+src = ["packages/*/src"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "S", "ASYNC", "SIM", "RUF"]
+allowed-confusables = ["–"]
+
+[tool.ruff.lint.per-file-ignores]
+# Testy używają assertów, a moduły "vulnerable" celowo zawierają podatny kod.
+"**/tests/**" = ["S101"]
+"**/vulnerable.py" = ["S"]
+
+[tool.mypy]
+strict = true
+python_version = "3.13"
+packages = ["bbq_core", "bbq_api", "bbq_sqli"]
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = ["testcontainers.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"
+testpaths = ["packages"]
+addopts = "--import-mode=importlib"
+markers = ["integration: testy wymagające Dockera (testcontainers)"]
