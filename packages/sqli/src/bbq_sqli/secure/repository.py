@@ -1,4 +1,4 @@
-"""✅ Wersja POPRAWIONA.
+"""Wersja POPRAWIONA.
 
 - Fraza trafia do bazy jako parametr zapytania, nigdy jako fragment SQL.
 - Znaki specjalne ``LIKE`` (``%``, ``_``) są escapowane, więc są traktowane dosłownie.

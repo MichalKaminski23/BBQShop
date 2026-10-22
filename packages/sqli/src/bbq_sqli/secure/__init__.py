@@ -1,4 +1,4 @@
-"""✅ Wersja poprawiona modułu SQLi."""
+"""Wersja poprawiona modułu SQLi."""
 
 from bbq_sqli.secure.repository import MAX_QUERY_LENGTH, SecureProductRepository, escape_like
 

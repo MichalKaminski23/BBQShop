@@ -1,4 +1,4 @@
-"""❌ Wersja PODATNA – celowo, w celach edukacyjnych.
+"""Wersja PODATNA – celowo, w celach edukacyjnych.
 
 Login i hasło pochodzą z surowego JSON i trafiają wprost do filtra zapytania
 MongoDB. Gdy atakujący poda wartość będącą obiektem (np. ``{"$ne": null}``),
@@ -16,7 +16,7 @@ class VulnerableUserRepository:
         self._users = users
 
     async def authenticate(self, username: object, password: object) -> dict[str, object] | None:
-        # ❌ username trafia wprost do filtra – można wstrzyknąć operator Mongo ({"$ne": null}).
+        # username trafia wprost do filtra – można wstrzyknąć operator Mongo ({"$ne": null}).
         user = await self._users.find_one({"username": username})
         if user is None:
             return None
@@ -27,7 +27,7 @@ class VulnerableUserRepository:
                 return user
             return None
 
-        # ❌ Hasło nie jest tekstem: zamiast weryfikować hash, "sprawdzamy" je
+        # Hasło nie jest tekstem: zamiast weryfikować hash, "sprawdzamy" je
         # operatorem w zapytaniu – dowolny operator (np. {"$ne": null}) pasuje.
         match = await self._users.find_one(
             {"username": user["username"], "password_hash": password}

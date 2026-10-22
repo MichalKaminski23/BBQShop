@@ -1,4 +1,4 @@
-"""✅ Wersja POPRAWIONA.
+"""Wersja POPRAWIONA.
 
 - Login i hasło muszą być tekstem; obiekty (operatory Mongo) są odrzucane,
   więc do filtra nigdy nie trafi operator zapytania.
@@ -17,7 +17,7 @@ class SecureUserRepository:
         self._users = users
 
     async def authenticate(self, username: object, password: object) -> dict[str, object] | None:
-        # ✅ Odrzucamy wszystko, co nie jest tekstem – operator Mongo nigdy nie trafi do filtra.
+        # Odrzucamy wszystko, co nie jest tekstem – operator Mongo nigdy nie trafi do filtra.
         if not isinstance(username, str) or not isinstance(password, str):
             return None
 

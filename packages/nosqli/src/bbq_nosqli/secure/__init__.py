@@ -1,4 +1,4 @@
-"""✅ Wersja poprawiona modułu NoSQLi."""
+"""Wersja poprawiona modułu NoSQLi."""
 
 from bbq_nosqli.secure.repository import SecureUserRepository
 

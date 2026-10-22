@@ -1,4 +1,4 @@
-"""❌ Wersja podatna modułu NoSQLi (celowo, w celach edukacyjnych)."""
+"""Wersja podatna modułu NoSQLi (celowo, w celach edukacyjnych)."""
 
 from bbq_nosqli.vulnerable.repository import VulnerableUserRepository
 

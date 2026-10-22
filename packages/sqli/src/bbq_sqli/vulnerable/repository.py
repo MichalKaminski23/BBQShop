@@ -1,4 +1,4 @@
-"""❌ Wersja PODATNA – celowo, w celach edukacyjnych.
+"""Wersja PODATNA – celowo, w celach edukacyjnych.
 
 Fraza wyszukiwania jest wklejana bezpośrednio w treść zapytania SQL.
 Apostrof w ``query`` kończy literał tekstowy, a reszta frazy staje się częścią
