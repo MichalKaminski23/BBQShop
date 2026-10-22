@@ -28,7 +28,7 @@ def build_router(variant: Variant) -> APIRouter:
         user = await repository_cls(mongo[USERS_COLLECTION]).authenticate(username, password)
         if user is None:
             raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Nieprawidłowy login lub hasło")
-        return LoginOut(username=str(user["username"]), role=user["role"])
+        return LoginOut(username=str(user["username"]), role=str(user["role"]))
 
     if variant is Variant.SECURE:
 
@@ -41,9 +41,13 @@ def build_router(variant: Variant) -> APIRouter:
         @router.post("")
         async def login_vulnerable(mongo: MongoDep, request: Request) -> LoginOut:
             """Loguje użytkownika, przyjmując surowy JSON (podatne na NoSQLi)."""
-            body = await request.json()
+            try:
+                body = await request.json()
+            except ValueError:
+                raise HTTPException(status.HTTP_400_BAD_REQUEST, "Niepoprawny JSON") from None
             if not isinstance(body, dict):
                 raise HTTPException(status.HTTP_400_BAD_REQUEST, "Oczekiwano obiektu JSON")
+            # Operatory Mongo nadal trafiają wprost do zapytania – podatność działa.
             return await _login(mongo, body.get("username"), body.get("password"))
 
     return router

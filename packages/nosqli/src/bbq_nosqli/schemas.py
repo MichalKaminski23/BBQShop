@@ -1,7 +1,5 @@
 """Schematy żądań i odpowiedzi API modułu NoSQLi."""
 
-from typing import Literal
-
 from pydantic import BaseModel
 
 
@@ -16,4 +14,4 @@ class LoginOut(BaseModel):
     """Wynik udanego logowania."""
 
     username: str
-    role: Literal["customer", "admin"]
+    role: str

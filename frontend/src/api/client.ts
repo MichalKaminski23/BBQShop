@@ -57,9 +57,16 @@ async function post<T>(path: string, payload: unknown): Promise<T> {
 }
 
 function describeError(body: unknown): string | null {
-  if (body && typeof body === 'object' && 'detail' in body) {
-    const { detail } = body
-    return typeof detail === 'string' ? detail : JSON.stringify(detail)
+  if (!body || typeof body !== 'object' || !('detail' in body)) {
+    return null
+  }
+  const { detail } = body
+  if (typeof detail === 'string') {
+    return detail
+  }
+  // Błędy walidacji (422) przychodzą jako tablica obiektów – pokaż czytelny komunikat.
+  if (Array.isArray(detail)) {
+    return 'Nieprawidłowe dane wejściowe.'
   }
   return null
 }

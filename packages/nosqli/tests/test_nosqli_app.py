@@ -71,3 +71,19 @@ async def test_wrong_password_is_rejected_in_both(client_for: ClientFactory) -> 
             )
 
         assert response.status_code == 401
+
+
+async def test_malformed_json_returns_400_in_vulnerable(client_for: ClientFactory) -> None:
+    async with client_for(Variant.VULNERABLE) as client:
+        response = await client.post(
+            "/api/login", content="to nie jest json", headers={"Content-Type": "application/json"}
+        )
+
+    assert response.status_code == 400
+
+
+async def test_non_object_body_returns_400_in_vulnerable(client_for: ClientFactory) -> None:
+    async with client_for(Variant.VULNERABLE) as client:
+        response = await client.post("/api/login", json=[1, 2, 3])
+
+    assert response.status_code == 400
