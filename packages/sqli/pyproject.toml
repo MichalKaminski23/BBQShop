@@ -3,13 +3,14 @@ name = "bbq-sqli"
 version = "0.1.0"
 description = "Moduł BBQShop: SQL Injection w wyszukiwarce produktów (wersja podatna i poprawiona)."
 requires-python = ">=3.13"
-dependencies = ["bbq-core"]
+dependencies = ["bbq-core", "bbq-db"]
 
 [project.entry-points."bbqshop.modules"]
 sqli = "bbq_sqli:module"
 
 [tool.uv.sources]
 bbq-core = { workspace = true }
+bbq-db = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]

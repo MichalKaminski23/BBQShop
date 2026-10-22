@@ -8,7 +8,7 @@ Wariant ustawiasz w `.env`:
 BBQ_MODULE_SQLI=vulnerable   # vulnerable | secure | off
 ```
 
-## ❌ Wersja podatna ([vulnerable.py](src/bbq_sqli/vulnerable.py))
+## ❌ Wersja podatna ([vulnerable/repository.py](src/bbq_sqli/vulnerable/repository.py))
 
 Fraza jest wklejana w zapytanie SQL:
 
@@ -26,7 +26,7 @@ q = ' UNION SELECT id, name, 'leak', 0, value FROM admin_secrets--
 
 W odpowiedzi pole `description` zawiera wartości z tabeli `admin_secrets`.
 
-## ✅ Wersja poprawiona ([secure.py](src/bbq_sqli/secure.py))
+## ✅ Wersja poprawiona ([secure/repository.py](src/bbq_sqli/secure/repository.py))
 
 - Zapytanie budowane przez SQLAlchemy. Fraza trafia do bazy jako **parametr**, nigdy jako fragment SQL.
 - Znaki `%` i `_` są escapowane, więc wzorzec `LIKE` traktuje je dosłownie.

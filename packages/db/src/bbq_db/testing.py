@@ -1,22 +1,25 @@
 """Fixtures pytest współdzielone przez wszystkie moduły (plugin ładowany w ``conftest.py``).
 
-Bazy danych startują jako kontenery Dockera (testcontainers) raz na sesję testów.
-Każdy test dostaje sesję w transakcji, która jest wycofywana po teście.
+Bazy danych startują jako kontenery Dockera (testcontainers) raz na sesję testów
+i są od razu wypełniane danymi przykładowymi. Każdy test dostaje sesję w transakcji,
+która jest wycofywana po teście, więc testy nie wpływają na siebie nawzajem.
 """
 
 from collections.abc import AsyncIterator, Iterator
-from importlib.metadata import entry_points
 
 import pytest
+from pymongo.asynchronous.database import AsyncDatabase
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
 from testcontainers.community.mongodb import MongoDbContainer
 from testcontainers.community.postgres import PostgresContainer
 
-from bbq_core.db import Base, create_engine
-from bbq_core.module import ENTRY_POINT_GROUP
+from bbq_core.db import create_engine, create_mongo_client
+from bbq_db.base import Base
+from bbq_db.seed import seed_mongo, seed_postgres
 
 POSTGRES_IMAGE = "postgres:17-alpine"
 MONGO_IMAGE = "mongo:8"
+MONGO_TEST_DB = "bbqshop_test"
 
 
 @pytest.fixture(scope="session")
@@ -33,13 +36,13 @@ def mongo_uri() -> Iterator[str]:
 
 @pytest.fixture(scope="session")
 async def pg_engine(postgres_dsn: str) -> AsyncIterator[AsyncEngine]:
-    """Silnik z utworzonymi tabelami wszystkich zainstalowanych modułów."""
-    for entry_point in entry_points(group=ENTRY_POINT_GROUP):
-        entry_point.load()  # rejestruje modele w Base.metadata
-
+    """Silnik z utworzonym schematem i danymi przykładowymi."""
     engine = create_engine(postgres_dsn)
     async with engine.begin() as connection:
         await connection.run_sync(Base.metadata.create_all)
+    async with AsyncSession(engine) as session:
+        await seed_postgres(session)
+        await session.commit()
     yield engine
     await engine.dispose()
 
@@ -57,3 +60,13 @@ async def db_session(pg_engine: AsyncEngine) -> AsyncIterator[AsyncSession]:
         finally:
             await session.close()
             await transaction.rollback()
+
+
+@pytest.fixture(scope="session")
+async def mongo_db(mongo_uri: str) -> AsyncIterator[AsyncDatabase[dict[str, object]]]:
+    """Baza MongoDB z danymi przykładowymi."""
+    client = create_mongo_client(mongo_uri)
+    db = client[MONGO_TEST_DB]
+    await seed_mongo(db)
+    yield db
+    await client.close()

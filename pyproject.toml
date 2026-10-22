@@ -7,6 +7,7 @@ requires-python = ">=3.13"
 dependencies = [
     "bbq-api",
     "bbq-core",
+    "bbq-db",
     "bbq-sqli",
 ]
 
@@ -30,6 +31,7 @@ members = ["packages/*"]
 [tool.uv.sources]
 bbq-api = { workspace = true }
 bbq-core = { workspace = true }
+bbq-db = { workspace = true }
 bbq-sqli = { workspace = true }
 
 [tool.ruff]
@@ -44,12 +46,12 @@ allowed-confusables = ["–"]
 [tool.ruff.lint.per-file-ignores]
 # Testy używają assertów, a moduły "vulnerable" celowo zawierają podatny kod.
 "**/tests/**" = ["S101"]
-"**/vulnerable.py" = ["S"]
+"**/vulnerable/**" = ["S"]
 
 [tool.mypy]
 strict = true
 python_version = "3.13"
-packages = ["bbq_core", "bbq_api", "bbq_sqli"]
+packages = ["bbq_core", "bbq_db", "bbq_api", "bbq_sqli"]
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]

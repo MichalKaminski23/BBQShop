@@ -11,6 +11,7 @@ WORKDIR /app
 # Najpierw same zależności – warstwa cache'uje się, dopóki nie zmieni się uv.lock.
 COPY pyproject.toml uv.lock .python-version ./
 COPY packages/core/pyproject.toml packages/core/
+COPY packages/db/pyproject.toml packages/db/
 COPY packages/api/pyproject.toml packages/api/
 COPY packages/sqli/pyproject.toml packages/sqli/
 RUN uv sync --locked --no-dev --no-install-workspace
@@ -24,4 +25,4 @@ ENV PATH="/app/.venv/bin:$PATH" \
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "alembic -c packages/api/alembic.ini upgrade head && bbq-api"]
+CMD ["sh", "-c", "alembic -c packages/db/alembic.ini upgrade head && bbq-api"]

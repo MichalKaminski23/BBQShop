@@ -6,12 +6,11 @@ Moduł rejestruje się przez entry point w grupie ``bbqshop.modules``::
     sqli = "bbq_sqli:module"
 """
 
-from collections.abc import Awaitable, Callable
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import StrEnum
 
 from fastapi import APIRouter
-from sqlalchemy.ext.asyncio import AsyncSession
 
 ENTRY_POINT_GROUP = "bbqshop.modules"
 
@@ -25,7 +24,6 @@ class Variant(StrEnum):
 
 
 type RouterFactory = Callable[[Variant], APIRouter]
-type Seeder = Callable[[AsyncSession], Awaitable[None]]
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -38,11 +36,9 @@ class BBQModule:
         description: Krótki opis podatności.
         build_router: Tworzy router FastAPI dla wybranego wariantu
             (wywoływane tylko dla ``vulnerable`` i ``secure``).
-        seed: Opcjonalne wypełnienie bazy danymi przykładowymi.
     """
 
     name: str
     title: str
     description: str
     build_router: RouterFactory
-    seed: Seeder | None = None

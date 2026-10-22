@@ -7,10 +7,11 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from bbq_api import system
-from bbq_api.registry import ActiveModule, discover_modules, resolve_modules
+from bbq_api.registry import discover_modules, resolve_modules
 from bbq_core.config import Settings, get_settings
 from bbq_core.db import create_engine, create_mongo_client, create_session_factory
 from bbq_core.module import BBQModule
+from bbq_db.seed import seed_mongo, seed_postgres
 
 logger = logging.getLogger("bbq_api")
 
@@ -35,7 +36,7 @@ def create_app(settings: Settings | None = None, modules: list[BBQModule] | None
         app.state.mongo_db = mongo_client[settings.mongo_db]
         try:
             if settings.seed_on_startup:
-                await _seed(app, active)
+                await _seed(app)
             yield
         finally:
             await mongo_client.close()
@@ -53,10 +54,9 @@ def create_app(settings: Settings | None = None, modules: list[BBQModule] | None
     return app
 
 
-async def _seed(app: FastAPI, active: list[ActiveModule]) -> None:
-    """Wypełnia bazę danymi przykładowymi włączonych modułów."""
+async def _seed(app: FastAPI) -> None:
+    """Wypełnia obie bazy danymi przykładowymi (tylko puste tabele i kolekcje)."""
     async with app.state.session_factory() as session:
-        for item in active:
-            if item.enabled and item.module.seed is not None:
-                await item.module.seed(session)
+        await seed_postgres(session)
         await session.commit()
+    await seed_mongo(app.state.mongo_db)

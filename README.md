@@ -47,22 +47,53 @@ Zgodnie z uwagami z 19.10:
 
 ```
 packages/
-├─ core/   bbq_core   # konfiguracja, połączenia z bazami, kontrakt modułu, fixtures testowe
-├─ api/    bbq_api    # aplikacja FastAPI, rejestr modułów, migracje Alembic
+├─ core/   bbq_core   # konfiguracja, połączenia z bazami, kontrakt modułu
+├─ db/     bbq_db     # wspólna baza: modele, kolekcje Mongo, migracje, dane przykładowe
+├─ api/    bbq_api    # aplikacja FastAPI, rejestr modułów, endpointy systemowe
 └─ sqli/   bbq_sqli   # moduł podatności (wzór dla kolejnych)
 frontend/             # React + Vite + TypeScript
 ```
 
-Każdy moduł podatności ma ten sam układ:
+### Baza danych (`packages/db`)
 
-| Plik            | Zawartość                                                  |
-|-----------------|------------------------------------------------------------|
-| `repository.py` | wspólny interfejs (`Protocol`) obu wariantów               |
-| `vulnerable.py` | ❌ wersja podatna                                           |
-| `secure.py`     | ✅ wersja poprawiona                                        |
-| `router.py`     | endpointy FastAPI, wybierają implementację wg wariantu     |
-| `README.md`     | opis podatności, przykładowy atak, opis poprawki           |
-| `tests/`        | te same scenariusze uruchamiane na obu wariantach          |
+Schemat jest wspólny i minimalny: zawiera tylko to, czego potrzebują demonstracje podatności. Moduły z niego korzystają i nie definiują własnych tabel.
+
+| Gdzie      | Tabela / kolekcja | Do czego                                                 |
+|------------|-------------------|----------------------------------------------------------|
+| PostgreSQL | `products`        | wyszukiwarka (SQLi), stan magazynu (race condition)      |
+| PostgreSQL | `admin_secrets`   | fikcyjne sekrety, cel ataku SQLi                         |
+| PostgreSQL | `orders`          | lista zamówień (N+1), wielokrotne złożenie zamówienia    |
+| PostgreSQL | `order_items`     | pozycje zamówień (N+1)                                   |
+| PostgreSQL | `coupons`         | kupon jednorazowy (race condition)                       |
+| MongoDB    | `users`           | logowanie (NoSQLi)                                       |
+
+```
+bbq_db/
+├─ base.py        # klasa bazowa modeli
+├─ models/        # tabele PostgreSQL
+├─ mongo/         # kolekcje MongoDB
+├─ migrations/    # migracje Alembic
+├─ seed/          # dane przykładowe (data.py) i ich wstawianie (seed.py)
+└─ testing.py     # fixtures pytest z bazami w Dockerze
+```
+
+Dane przykładowe są wstawiane przy starcie API, tylko do pustych tabel. Wszystkie hasła i sekrety w nich są fikcyjne.
+
+### Moduł podatności
+
+Każdy moduł ma ten sam układ, z wersją podatną i poprawioną w osobnych folderach:
+
+```
+bbq_<nazwa>/
+├─ __init__.py       # rejestracja modułu (nazwa, tytuł, opis)
+├─ router.py         # endpointy FastAPI, wybierają wersję wg .env
+├─ schemas.py        # modele odpowiedzi API
+├─ repository.py     # wspólny interfejs obu wersji
+├─ vulnerable/       # ❌ wersja podatna
+└─ secure/           # ✅ wersja poprawiona
+README.md            # opis podatności, przykładowy atak, opis poprawki
+tests/               # te same scenariusze uruchamiane na obu wersjach
+```
 
 ### Wybór wariantu (`.env`)
 
@@ -102,7 +133,7 @@ uv sync
 ```
 
 ```bash
-uv run alembic -c packages/api/alembic.ini upgrade head
+uv run alembic -c packages/db/alembic.ini upgrade head
 ```
 
 ```bash
@@ -129,14 +160,14 @@ Hooki przed commitem: `uv run pre-commit install`. CI (GitHub Actions) uruchamia
 
 ## Jak dodać nowy moduł
 
-1. Skopiuj `packages/sqli` jako `packages/<nazwa>` i zmień nazwy (`bbq_<nazwa>`).
+1. Skopiuj `packages/sqli` jako `packages/<nazwa>` i zmień nazwy (`bbq_<nazwa>`). Kod podatny trafia do `vulnerable/`, poprawiony do `secure/`.
 2. W `packages/<nazwa>/pyproject.toml` zarejestruj moduł:
    ```toml
    [project.entry-points."bbqshop.modules"]
    <nazwa> = "bbq_<nazwa>:module"
    ```
 3. Dodaj paczkę do `dependencies` i `[tool.uv.sources]` w głównym `pyproject.toml` oraz do `packages` w `[tool.mypy]`, potem `uv sync`.
-4. Jeśli moduł ma tabele w Postgresie, dodaj migrację: `uv run alembic -c packages/api/alembic.ini revision --autogenerate -m "<opis>"`.
+4. Moduł korzysta ze wspólnego schematu z `bbq_db`. Gdyby naprawdę potrzebował nowej kolumny lub tabeli, dodaj model w `packages/db/src/bbq_db/models/` i migrację: `uv run alembic -c packages/db/alembic.ini revision --autogenerate -m "<opis>"`.
 5. Dodaj `COPY packages/<nazwa>/pyproject.toml` w [packages/api/Dockerfile](packages/api/Dockerfile).
 6. Ustaw `BBQ_MODULE_<NAZWA>` w `.env.example`.
 

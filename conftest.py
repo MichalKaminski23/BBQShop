@@ -1,1 +1,1 @@
-pytest_plugins = ["bbq_core.testing"]
+pytest_plugins = ["bbq_db.testing"]

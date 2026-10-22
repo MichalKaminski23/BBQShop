@@ -8,7 +8,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bbq_sqli.models import Product
+from bbq_db.models import Product
 from bbq_sqli.schemas import ProductOut
 
 MAX_QUERY_LENGTH = 100

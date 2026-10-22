@@ -10,6 +10,7 @@ resolution-markers = [
 members = [
     "bbq-api",
     "bbq-core",
+    "bbq-db",
     "bbq-sqli",
     "bbqshop",
 ]
@@ -181,16 +182,16 @@ name = "bbq-api"
 version = "0.1.0"
 source = { editable = "packages/api" }
 dependencies = [
-    { name = "alembic" },
     { name = "bbq-core" },
+    { name = "bbq-db" },
     { name = "fastapi" },
     { name = "uvicorn", extra = ["standard"] },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "alembic", specifier = ">=1.14" },
     { name = "bbq-core", editable = "packages/core" },
+    { name = "bbq-db", editable = "packages/db" },
     { name = "fastapi", specifier = ">=0.115" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.32" },
 ]
@@ -219,15 +220,34 @@ requires-dist = [
 ]
 
 [[package]]
+name = "bbq-db"
+version = "0.1.0"
+source = { editable = "packages/db" }
+dependencies = [
+    { name = "alembic" },
+    { name = "bbq-core" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "alembic", specifier = ">=1.14" },
+    { name = "bbq-core", editable = "packages/core" },
+]
+
+[[package]]
 name = "bbq-sqli"
 version = "0.1.0"
 source = { editable = "packages/sqli" }
 dependencies = [
     { name = "bbq-core" },
+    { name = "bbq-db" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "bbq-core", editable = "packages/core" }]
+requires-dist = [
+    { name = "bbq-core", editable = "packages/core" },
+    { name = "bbq-db", editable = "packages/db" },
+]
 
 [[package]]
 name = "bbqshop"
@@ -236,6 +256,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "bbq-api" },
     { name = "bbq-core" },
+    { name = "bbq-db" },
     { name = "bbq-sqli" },
 ]
 
@@ -254,6 +275,7 @@ dev = [
 requires-dist = [
     { name = "bbq-api", editable = "packages/api" },
     { name = "bbq-core", editable = "packages/core" },
+    { name = "bbq-db", editable = "packages/db" },
     { name = "bbq-sqli", editable = "packages/sqli" },
 ]
 

@@ -3,9 +3,9 @@
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from bbq_db.seed.data import PRODUCTS, SECRETS
 from bbq_sqli.repository import ProductRepository
 from bbq_sqli.secure import SecureProductRepository
-from bbq_sqli.seed import SECRETS, seed
 from bbq_sqli.vulnerable import VulnerableProductRepository
 
 pytestmark = pytest.mark.integration
@@ -18,11 +18,6 @@ BOTH = pytest.mark.parametrize(
 
 UNION_PAYLOAD = "' UNION SELECT id, name, 'leak', 0, value FROM admin_secrets--"
 SECRET_VALUES = {str(secret["value"]) for secret in SECRETS}
-
-
-@pytest.fixture(autouse=True)
-async def _seeded(db_session: AsyncSession) -> None:
-    await seed(db_session)
 
 
 @BOTH
@@ -41,7 +36,7 @@ async def test_empty_query_returns_all_products(
 ) -> None:
     results = await repository_cls(db_session).search("")
 
-    assert len(results) == 7
+    assert len(results) == len(PRODUCTS)
 
 
 async def test_union_payload_leaks_secrets_in_vulnerable(db_session: AsyncSession) -> None:

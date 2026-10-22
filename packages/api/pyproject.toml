@@ -4,8 +4,8 @@ version = "0.1.0"
 description = "Aplikacja FastAPI składająca moduły podatności BBQShop."
 requires-python = ">=3.13"
 dependencies = [
-    "alembic>=1.14",
     "bbq-core",
+    "bbq-db",
     "fastapi>=0.115",
     "uvicorn[standard]>=0.32",
 ]
@@ -15,6 +15,7 @@ bbq-api = "bbq_api.__main__:main"
 
 [tool.uv.sources]
 bbq-core = { workspace = true }
+bbq-db = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]

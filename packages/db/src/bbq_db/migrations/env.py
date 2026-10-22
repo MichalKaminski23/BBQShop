@@ -1,16 +1,15 @@
-"""Środowisko Alembica: metadane wszystkich modułów + async silnik z konfiguracji."""
+"""Środowisko Alembica: metadane modeli ``bbq_db`` + async silnik z konfiguracji."""
 
 import asyncio
 
 from alembic import context
 from sqlalchemy.engine import Connection
 
-from bbq_api.registry import discover_modules
+import bbq_db.models  # noqa: F401  (rejestruje tabele w Base.metadata)
 from bbq_core.config import get_settings
-from bbq_core.db import Base, create_engine
+from bbq_core.db import create_engine
+from bbq_db.base import Base
 
-# Import modułów rejestruje ich modele ORM w Base.metadata.
-discover_modules()
 target_metadata = Base.metadata
 
 
