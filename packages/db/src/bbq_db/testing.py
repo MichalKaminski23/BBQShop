@@ -18,7 +18,9 @@ from bbq_db.base import Base
 from bbq_db.seed import seed_mongo, seed_postgres
 
 POSTGRES_IMAGE = "postgres:17-alpine"
-MONGO_IMAGE = "mongo:8"
+# MongoDB 5.0+ wymaga CPU z AVX, czego nie gwarantują runnery CI. Do testów używamy
+# ostatniej wersji bez tego wymogu (aplikacja i docker-compose zostają na mongo:8).
+MONGO_IMAGE = "mongo:4.4"
 MONGO_TEST_DB = "bbqshop_test"
 
 
