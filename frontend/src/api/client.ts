@@ -20,6 +20,11 @@ export interface Product {
   description: string
 }
 
+export interface LoginResult {
+  username: string
+  role: 'customer' | 'admin'
+}
+
 export class ApiError extends Error {
   readonly status: number
 
@@ -31,6 +36,19 @@ export class ApiError extends Error {
 
 async function request<T>(path: string): Promise<T> {
   const response = await fetch(`/api${path}`)
+  const body: unknown = await response.json().catch(() => null)
+  if (!response.ok) {
+    throw new ApiError(response.status, describeError(body) ?? response.statusText)
+  }
+  return body as T
+}
+
+async function post<T>(path: string, payload: unknown): Promise<T> {
+  const response = await fetch(`/api${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
   const body: unknown = await response.json().catch(() => null)
   if (!response.ok) {
     throw new ApiError(response.status, describeError(body) ?? response.statusText)
@@ -51,4 +69,5 @@ export const api = {
   modules: () => request<ModuleInfo[]>('/modules'),
   searchProducts: (q: string) =>
     request<Product[]>(`/products/search?${new URLSearchParams({ q })}`),
+  login: (payload: unknown) => post<LoginResult>('/login', payload),
 }

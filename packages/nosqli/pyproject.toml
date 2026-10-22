@@ -1,0 +1,20 @@
+[project]
+name = "bbq-nosqli"
+version = "0.1.0"
+description = "Moduł BBQShop: NoSQL Injection w logowaniu (wersja podatna i poprawiona)."
+requires-python = ">=3.13"
+dependencies = ["bbq-core", "bbq-db"]
+
+[project.entry-points."bbqshop.modules"]
+nosqli = "bbq_nosqli:module"
+
+[tool.uv.sources]
+bbq-core = { workspace = true }
+bbq-db = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/bbq_nosqli"]

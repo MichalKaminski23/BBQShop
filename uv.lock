@@ -11,6 +11,7 @@ members = [
     "bbq-api",
     "bbq-core",
     "bbq-db",
+    "bbq-nosqli",
     "bbq-sqli",
     "bbqshop",
 ]
@@ -235,6 +236,21 @@ requires-dist = [
 ]
 
 [[package]]
+name = "bbq-nosqli"
+version = "0.1.0"
+source = { editable = "packages/nosqli" }
+dependencies = [
+    { name = "bbq-core" },
+    { name = "bbq-db" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "bbq-core", editable = "packages/core" },
+    { name = "bbq-db", editable = "packages/db" },
+]
+
+[[package]]
 name = "bbq-sqli"
 version = "0.1.0"
 source = { editable = "packages/sqli" }
@@ -257,6 +273,7 @@ dependencies = [
     { name = "bbq-api" },
     { name = "bbq-core" },
     { name = "bbq-db" },
+    { name = "bbq-nosqli" },
     { name = "bbq-sqli" },
 ]
 
@@ -276,6 +293,7 @@ requires-dist = [
     { name = "bbq-api", editable = "packages/api" },
     { name = "bbq-core", editable = "packages/core" },
     { name = "bbq-db", editable = "packages/db" },
+    { name = "bbq-nosqli", editable = "packages/nosqli" },
     { name = "bbq-sqli", editable = "packages/sqli" },
 ]
 

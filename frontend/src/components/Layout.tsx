@@ -10,6 +10,7 @@ export function Layout() {
             Moduły
           </NavLink>
           <NavLink to="/shop">Sklep</NavLink>
+          <NavLink to="/login">Logowanie</NavLink>
         </nav>
       </header>
       <main className="main">
