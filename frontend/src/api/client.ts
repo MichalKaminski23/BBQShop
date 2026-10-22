@@ -69,5 +69,6 @@ export const api = {
   modules: () => request<ModuleInfo[]>('/modules'),
   searchProducts: (q: string) =>
     request<Product[]>(`/products/search?${new URLSearchParams({ q })}`),
-  login: (payload: unknown) => post<LoginResult>('/login', payload),
+  login: (username: string, password: string) =>
+    post<LoginResult>('/login', { username, password }),
 }

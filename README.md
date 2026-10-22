@@ -50,7 +50,8 @@ packages/
 ├─ core/   bbq_core   # konfiguracja, połączenia z bazami, kontrakt modułu
 ├─ db/     bbq_db     # wspólna baza: modele, kolekcje Mongo, migracje, dane przykładowe
 ├─ api/    bbq_api    # aplikacja FastAPI, rejestr modułów, endpointy systemowe
-└─ sqli/   bbq_sqli   # moduł podatności (wzór dla kolejnych)
+├─ sqli/   bbq_sqli   # moduł SQL Injection (wzór dla kolejnych)
+└─ nosqli/ bbq_nosqli # moduł NoSQL Injection (logowanie)
 frontend/             # React + Vite + TypeScript
 ```
 
@@ -102,9 +103,16 @@ Każdy moduł włączasz w wersji podatnej, poprawionej albo wyłączasz:
 ```
 BBQ_DEFAULT_VARIANT=secure     # dla modułów bez własnego ustawienia
 BBQ_MODULE_SQLI=vulnerable     # vulnerable | secure | off
+BBQ_MODULE_NOSQLI=vulnerable   # vulnerable | secure | off
 ```
 
 Endpoint `GET /api/modules` zwraca aktywne warianty, a frontend pokazuje je na stronie głównej. Pełna lista zmiennych jest w [.env.example](.env.example).
+
+## Dokumentacja
+
+- [docs/URUCHOMIENIE.md](docs/URUCHOMIENIE.md) – instrukcja uruchomienia krok po kroku (wymagania, Docker, tryb dev).
+- [docs/PLAN.md](docs/PLAN.md) – plan implementacji i status modułów.
+- [docs/architecture.svg](docs/architecture.svg) – diagram architektury.
 
 ## Jak uruchomić
 

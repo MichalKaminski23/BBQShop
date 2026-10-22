@@ -7,7 +7,7 @@ export function LoginPage() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const login = useMutation<LoginResult, Error, void>({
-    mutationFn: () => api.login({ username, password }),
+    mutationFn: () => api.login(username, password),
   })
 
   function handleSubmit(event: FormEvent) {
