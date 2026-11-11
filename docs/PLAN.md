@@ -1,94 +1,97 @@
-# Plan implementacji
-
-> 📌 **Aktualizuj ten plik na bieżąco.** Gdy skończysz moduł, zmień jego status w tabeli
-> (`⬜ do zrobienia` → `🟡 w trakcie` → `✅ gotowe`), wpisz się w kolumnie „Kto", odhacz
-> zadania w sekcji danego modułu i ustaw datę. Dzięki temu cała sekcja widzi, co jest zrobione.
+# Plan i status modułów
 
 ## Status modułów
 
-| # | Moduł | Pakiet | Endpoint | Status | Kto |
-|---|-------|--------|----------|--------|-----|
+| # | Moduł | Pakiet | Endpoint | Status | Osoba |
+|---|---|---|---|---|---|
 | 1 | SQL Injection | `bbq_sqli` | `GET /api/products/search` | ✅ gotowe | Błażej |
 | 2 | NoSQL Injection | `bbq_nosqli` | `POST /api/login` | ✅ gotowe | Błażej |
-| 3 | Command Injection | `bbq_cmdi` | *(do ustalenia)* | ⬜ do zrobienia | Kuba |
-| 4 | Path Traversal | `bbq_pathtraversal` | *(do ustalenia)* | ⬜ do zrobienia | Kuba |
-| 5 | Arbitrary File Read / Write | `bbq_fileio` | *(do ustalenia)* | ⬜ do zrobienia |Wojtek |
-| 6 | Race Conditions | `bbq_race` | *(do ustalenia)* | ⬜ do zrobienia | Radek |
+| 3 | Command Injection | `bbq_cmdi` | do ustalenia | ⬜ do zrobienia | Kuba |
+| 4 | Path Traversal | `bbq_pathtraversal` | do ustalenia | ⬜ do zrobienia | Kuba |
+| 5 | Arbitrary File Read / Write | `bbq_fileio` | do ustalenia | ⬜ do zrobienia | Wojtek |
+| 6 | Race Conditions | `bbq_race` | do ustalenia | ⬜ do zrobienia | Radek |
 | 7 | Problem N+1 | `bbq_nplusone` | `GET /api/orders` | ✅ gotowe | Michał |
-| 8 | Nieograniczona współbieżność / wielokrotne wykonanie | `bbq_concurrency` | `POST /api/orders` | ✅ gotowe | Michał |
-| 9 | Deskryptory plików i gniazd | `bbq_fdleak` | *(do ustalenia)* | ⬜ do zrobienia | Patryk |
+| 8 | Wielokrotne wykonanie / współbieżność | `bbq_concurrency` | `POST /api/orders` | ✅ gotowe | Michał |
+| 9 | Deskryptory plików i gniazd | `bbq_fdleak` | do ustalenia | ⬜ do zrobienia | Patryk |
 
 Legenda: ✅ gotowe · 🟡 w trakcie · ⬜ do zrobienia
 
----
+Dokumentacja gotowych modułów znajduje się w:
 
-## Jak dodać nowy moduł (wzór: `packages/sqli`)
+- [SQL Injection](podatnosci/SQLi.md)
+- [NoSQL Injection](podatnosci/NoSQLi.md)
+- [Problem N+1](podatnosci/Nplusone.md)
+- [Współbieżność](podatnosci/Concurrency.md)
 
-Każdy moduł ma ten sam układ: wersja podatna w `vulnerable/`, poprawiona w `secure/`, wspólny
-interfejs w `repository.py`, router wybierający wariant wg `.env`, testy na obu wersjach.
+## Standard nowego modułu
 
-1. **Skopiuj wzór:** `packages/sqli` → `packages/<nazwa>`, zmień nazwy na `bbq_<nazwa>`.
-   Kod podatny do `vulnerable/`, poprawiony do `secure/`.
-2. **Zarejestruj moduł** w `packages/<nazwa>/pyproject.toml`:
-   ```toml
-   [project.entry-points."bbqshop.modules"]
-   <nazwa> = "bbq_<nazwa>:module"
-   ```
-3. **Dodaj paczkę** do głównego `pyproject.toml` (`dependencies`, `[tool.uv.sources]`,
-   `[tool.mypy].packages`), potem `uv sync`.
-4. **Schemat bazy** – korzystaj ze wspólnego `bbq_db`. Gdyby trzeba było nowej tabeli/kolumny,
-   dodaj model w `packages/db/src/bbq_db/models/` i migrację:
-   `uv run alembic -c packages/db/alembic.ini revision --autogenerate -m "<opis>"`.
-5. **Docker** – dopisz `COPY packages/<nazwa>/pyproject.toml packages/<nazwa>/` w
-   [`packages/api/Dockerfile`](../packages/api/Dockerfile).
-6. **Konfiguracja** – dodaj `BBQ_MODULE_<NAZWA>` w [`.env.example`](../.env.example).
-7. **Testy** – te same scenariusze na obu wariantach (patrz `packages/sqli/tests`
-   i `packages/nosqli/tests`): zwykłe działanie w obu, atak przechodzi w `vulnerable`,
-   jest zablokowany w `secure`.
-8. **README modułu** – krótki opis podatności, przykładowy atak i opis poprawki.
+Każdy moduł powinien mieć:
 
-API odkrywa moduł automatycznie (entry points) – nie trzeba zmieniać kodu `bbq_api`.
+```text
+packages/<nazwa>/
+├─ pyproject.toml
+├─ README.md
+├─ src/bbq_<nazwa>/
+│  ├─ __init__.py
+│  ├─ py.typed
+│  ├─ repository.py
+│  ├─ router.py
+│  ├─ schemas.py
+│  ├─ vulnerable/
+│  └─ secure/
+└─ tests/
+```
 
-### Checklista dla każdego modułu
-- [ ] Struktura paczki (`vulnerable/`, `secure/`, `repository.py`, `router.py`, `schemas.py`)
-- [ ] Wersja podatna działa i da się ją zaatakować
-- [ ] Wersja poprawiona blokuje atak, normalne działanie bez zmian
-- [ ] Testy jednostkowe + integracyjne (oba warianty)
-- [ ] `BBQ_MODULE_<NAZWA>` w `.env.example`, wpis w `Dockerfile`
-- [ ] README modułu (atak + poprawka)
-- [ ] `uv run ruff check . && uv run ruff format --check . && uv run mypy && uv run pytest` – zielone
+Wariant `vulnerable` pokazuje problem edukacyjny, a `secure` poprawkę.
+Oba warianty powinny zachować ten sam kontrakt endpointu.
 
----
+## Checklista implementacji
 
-## Pomysły na implementację pozostałych modułów
+- [ ] paczka i entry point `bbqshop.modules`,
+- [ ] zależność w głównym `pyproject.toml` i `uv.lock`,
+- [ ] wpis w `packages/api/Dockerfile`,
+- [ ] ustawienie `BBQ_MODULE_<NAZWA>` w `.env.example`,
+- [ ] modele/migracja, jeśli moduł wymaga zmian w bazie,
+- [ ] wariant podatny i poprawiony,
+- [ ] testy jednostkowe i integracyjne,
+- [ ] dokumentacja w `packages/<nazwa>/README.md`,
+- [ ] instrukcja demonstracji w `docs/podatnosci/<Nazwa>.md`,
+- [ ] odnośnik w `docs/README.md`,
+- [ ] przejście jakości:
 
-> Propozycje punktu zaczepienia – do doprecyzowania przy realizacji. Wiele z nich może
-> wykorzystać istniejące tabele (patrz komentarze w [`seed/data.py`](../packages/db/src/bbq_db/seed/data.py)).
+  ```powershell
+  uv run ruff check .
+  uv run ruff format --check .
+  uv run mypy
+  uv run pytest
+  ```
 
-### 3. Command Injection (`bbq_cmdi`)
-- Endpoint uruchamiający polecenie systemowe z danych użytkownika (np. „diagnostyka": `ping` hosta, konwersja/eksport).
-- ❌ Podatna: sklejanie polecenia i `shell=True`. ✅ Poprawiona: brak shella, lista argumentów, walidacja/whitelist.
+API odkrywa moduły przez entry points. Nie należy dodawać ich ręcznie do
+`bbq_api`.
 
-### 4. Path Traversal (`bbq_pathtraversal`)
-- Endpoint pobierający plik po nazwie (np. instrukcja produktu, faktura): `GET /api/files?name=...`.
-- ❌ Podatna: doklejanie nazwy do ścieżki (`../../etc/passwd`). ✅ Poprawiona: `Path.resolve()` + sprawdzenie, że wynik jest w dozwolonym katalogu.
+## Pomysły dla pozostałych modułów
 
-### 5. Arbitrary File Read / Write (`bbq_fileio`)
-- Odczyt/zapis pliku o ścieżce z danych użytkownika (np. zapis notatki/uploadu).
-- ❌ Podatna: ścieżka wprost od użytkownika. ✅ Poprawiona: stały katalog, bezpieczna nazwa, limit rozmiaru i typu.
+### Command Injection (`bbq_cmdi`)
 
-### 6. Race Conditions (`bbq_race`)
-- Gotowe dane: kupon jednorazowy `GRILL10` (`uses_left=1`) i produkt `Grill gazowy Flame 3` (`stock=1`).
-- ❌ Podatna: sprawdź-potem-zapisz bez blokady (równoległe żądania zużywają kupon/stan wielokrotnie). ✅ Poprawiona: atomowy `UPDATE ... WHERE uses_left > 0` / blokada wiersza.
+Endpoint diagnostyczny uruchamiający polecenie systemowe. Wariant poprawiony
+powinien używać listy argumentów, bez `shell=True`, oraz whitelisty.
 
-### 7. Problem N+1 (`bbq_nplusone`)
-- Gotowe dane: `orders` + `order_items`. Endpoint listujący zamówienia z pozycjami.
-- ❌ Podatna: osobne zapytanie o pozycje dla każdego zamówienia. ✅ Poprawiona: `selectinload`/`join` – jedno zapytanie.
+### Path Traversal (`bbq_pathtraversal`)
 
-### 8. Nieograniczona współbieżność / wielokrotne wykonanie (`bbq_concurrency`)
-- Wielokrotne złożenie tego samego zamówienia / brak limitu równoległych operacji.
-- ❌ Podatna: brak idempotencji i limitu. ✅ Poprawiona: klucz idempotencji, semafor/limit równoległości.
+Endpoint pobierający plik po nazwie. Wariant poprawiony powinien używać
+`Path.resolve()` i sprawdzać katalog bazowy.
 
-### 9. Deskryptory plików i gniazd (`bbq_fdleak`)
-- Operacja otwierająca plik/gniazdo przy każdym żądaniu.
-- ❌ Podatna: brak zamknięcia (wyciek deskryptorów). ✅ Poprawiona: `with`/context manager, pula połączeń, zamykanie w `finally`.
+### Arbitrary File Read / Write (`bbq_fileio`)
+
+Endpoint odczytu/zapisu pliku. Wariant poprawiony powinien ograniczać katalog,
+nazwę, rozmiar i typ pliku.
+
+### Race Conditions (`bbq_race`)
+
+Kupon `GRILL10` i produkt z jednym stanem magazynowym. Wariant poprawiony
+powinien używać atomowego `UPDATE ... WHERE` albo blokady wiersza.
+
+### Deskryptory plików i gniazd (`bbq_fdleak`)
+
+Endpoint otwierający pliki lub gniazda. Wariant poprawiony powinien używać
+context managerów i gwarantować zamknięcie zasobów.

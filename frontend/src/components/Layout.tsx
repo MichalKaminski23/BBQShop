@@ -19,7 +19,7 @@ export function Layout() {
         <Outlet />
       </main>
       <footer className="footer">
-        Projekt edukacyjny TBO – aplikacja celowo zawiera podatności.
+        Projekt edukacyjny TBO - aplikacja celowo zawiera podatności.
       </footer>
     </div>
   )

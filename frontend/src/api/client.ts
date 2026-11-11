@@ -98,7 +98,6 @@ function describeError(body: unknown): string | null {
   if (typeof detail === 'string') {
     return detail
   }
-  // Błędy walidacji (422) przychodzą jako tablica obiektów – pokaż czytelny komunikat.
   if (Array.isArray(detail)) {
     return 'Nieprawidłowe dane wejściowe.'
   }

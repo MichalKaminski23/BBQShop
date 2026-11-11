@@ -1,7 +1,7 @@
 [project]
 name = "bbqshop"
 version = "0.1.0"
-description = "Edukacyjny sklep BBQ z celowymi podatnościami i ich poprawionymi wersjami (TBO)."
+description = "Edukacyjny sklep BBQ z celowymi podatnościami i ich poprawionymi wersjami."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
@@ -47,10 +47,9 @@ src = ["packages/*/src"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "UP", "B", "S", "ASYNC", "SIM", "RUF"]
-allowed-confusables = ["–"]
+allowed-confusables = ["-"]
 
 [tool.ruff.lint.per-file-ignores]
-# Testy używają assertów, a moduły "vulnerable" celowo zawierają podatny kod.
 "**/tests/**" = ["S101"]
 "**/vulnerable/**" = ["S"]
 

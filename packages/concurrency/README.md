@@ -13,6 +13,10 @@ W aplikacji frontendowej formularz demonstracyjny jest dostępny pod adresem:
 http://localhost:5173/concurrency
 ```
 
+Pełny scenariusz demonstracyjny znajduje się w
+[docs/podatnosci/Concurrency.md](../../docs/podatnosci/Concurrency.md). Ten
+plik opisuje implementację i testy paczki.
+
 ## Wybór wariantu
 
 W pliku `.env` ustaw:

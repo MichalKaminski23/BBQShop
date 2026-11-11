@@ -5,7 +5,7 @@ from bbq_db.base import Base
 
 
 class AdminSecret(Base):
-    """Dane, których nie zwraca żaden endpoint – cel ataku SQLi."""
+    """Dane, których nie zwraca żaden endpoint - cel ataku SQLi."""
 
     __tablename__ = "admin_secrets"
 

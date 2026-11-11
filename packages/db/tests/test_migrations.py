@@ -11,7 +11,7 @@ from alembic.migration import MigrationContext
 from sqlalchemy import text
 from sqlalchemy.engine import Connection, make_url
 
-import bbq_db.models  # noqa: F401  (rejestruje tabele w Base.metadata)
+import bbq_db.models  
 from bbq_core.config import get_settings
 from bbq_core.db import create_engine
 from bbq_db.base import Base

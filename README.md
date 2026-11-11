@@ -108,11 +108,7 @@ Endpoint `GET /api/modules` zwraca aktywne warianty, a frontend pokazuje je na s
 
 ## Dokumentacja
 
-- [docs/URUCHOMIENIE.md](docs/URUCHOMIENIE.md) – instrukcja uruchomienia krok po kroku (wymagania, Docker, tryb dev).
-- [docs/podatnosci/Nplusone.md](docs/podatnosci/Nplusone.md) – opis problemu N+1 i demonstracja wariantów.
-- [docs/podatnosci/Concurrency.md](docs/podatnosci/Concurrency.md) – opis idempotencji i ograniczania współbieżności.
-- [docs/PLAN.md](docs/PLAN.md) – plan implementacji i status modułów.
-- [docs/architecture.svg](docs/architecture.svg) – diagram architektury.
+- [docs/README.md](docs/README.md) – indeks całej dokumentacji.
 
 ## Jak uruchomić
 
@@ -184,10 +180,3 @@ API odkrywa moduł automatycznie. Nie trzeba zmieniać kodu `bbq_api`.
 ## Repozytorium
 
 https://github.com/MichalKaminski23/BBQShop
-
-## Harmonogram
-
-| Data  | Wydarzenie                                                          |
-|-------|---------------------------------------------------------------------|
-| 19.10 | Uwagi do projektu: podział na moduły, testy, FastAPI jako warstwa łącząca |
-| 02.11 | Spotkanie (zdalnie)                                                 |

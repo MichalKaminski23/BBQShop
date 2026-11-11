@@ -1,4 +1,4 @@
-"""Endpointy modułu NoSQLi – implementacja zależy od wariantu z ``.env``."""
+"""Endpointy modułu NoSQLi - implementacja zależy od wariantu z ``.env``."""
 
 from fastapi import APIRouter, HTTPException, Request, status
 from pymongo.asynchronous.database import AsyncDatabase
@@ -47,7 +47,6 @@ def build_router(variant: Variant) -> APIRouter:
                 raise HTTPException(status.HTTP_400_BAD_REQUEST, "Niepoprawny JSON") from None
             if not isinstance(body, dict):
                 raise HTTPException(status.HTTP_400_BAD_REQUEST, "Oczekiwano obiektu JSON")
-            # Operatory Mongo nadal trafiają wprost do zapytania – podatność działa.
             return await _login(mongo, body.get("username"), body.get("password"))
 
     return router

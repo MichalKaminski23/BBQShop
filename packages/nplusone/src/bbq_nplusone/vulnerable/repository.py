@@ -1,4 +1,4 @@
-"""Wersja PODATNA – celowo wykonuje zapytanie pozycji dla każdego zamówienia."""
+"""Wersja PODATNA - celowo wykonuje zapytanie pozycji dla każdego zamówienia."""
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession

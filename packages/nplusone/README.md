@@ -13,6 +13,10 @@ W aplikacji frontendowej widok jest dostępny pod adresem:
 http://localhost:5173/orders
 ```
 
+Pełny scenariusz demonstracyjny znajduje się w
+[docs/podatnosci/Nplusone.md](../../docs/podatnosci/Nplusone.md). Ten plik
+opisuje implementację i testy paczki.
+
 ## Wybór wariantu
 
 W pliku `.env` ustaw:

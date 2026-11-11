@@ -1,4 +1,4 @@
-"""Wersja POPRAWIONA – pozycje wszystkich zamówień są ładowane zbiorczo."""
+"""Wersja POPRAWIONA - pozycje wszystkich zamówień są ładowane zbiorczo."""
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession

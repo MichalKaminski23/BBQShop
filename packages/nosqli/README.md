@@ -3,6 +3,10 @@
 Logowanie: `POST /api/login` z ciałem `{"username": "...", "password": "..."}`.
 Użytkownicy są w kolekcji MongoDB `users` (hasła są hashowane, PBKDF2).
 
+Praktyczny scenariusz demonstracyjny znajduje się w
+[docs/podatnosci/NoSQLi.md](../../docs/podatnosci/NoSQLi.md). Ten plik opisuje
+implementację i testy paczki.
+
 Wariant ustawiasz w `.env`:
 
 ```

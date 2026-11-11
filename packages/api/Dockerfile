@@ -1,5 +1,3 @@
-# Obraz API budowany z katalogu głównego repo:
-#   docker build -f packages/api/Dockerfile .
 FROM ghcr.io/astral-sh/uv:0.13.1-python3.13-trixie-slim
 
 ENV UV_COMPILE_BYTECODE=1 \
@@ -8,7 +6,6 @@ ENV UV_COMPILE_BYTECODE=1 \
 
 WORKDIR /app
 
-# Najpierw same zależności – warstwa cache'uje się, dopóki nie zmieni się uv.lock.
 COPY pyproject.toml uv.lock .python-version ./
 COPY packages/core/pyproject.toml packages/core/
 COPY packages/db/pyproject.toml packages/db/
