@@ -161,6 +161,31 @@ Aktywny wariant sprawdzisz na http://localhost:8000/api/modules albo na stronie 
 
 Pełny opis znajduje się w [podatnosci/Nplusone.md](podatnosci/Nplusone.md).
 
+### Demonstracja wielokrotnego wykonania zamówienia
+
+Moduł używa endpointu `POST /api/orders`. Wariant ustawisz przez:
+
+```bash
+BBQ_MODULE_CONCURRENCY=vulnerable
+```
+
+Wariant podatny tworzy nowe zamówienie przy każdym powtórzeniu żądania.
+Wariant poprawiony wymaga `Idempotency-Key` i zwraca istniejące zamówienie
+przy ponowieniu tego samego żądania:
+
+```bash
+BBQ_MODULE_CONCURRENCY=secure
+```
+
+Po zmianie przeładuj API:
+
+```bash
+docker compose up -d --force-recreate api
+```
+
+Pełny opis oraz scenariusz z równoległymi żądaniami znajduje się w
+[podatnosci/Concurrency.md](podatnosci/Concurrency.md).
+
 ---
 
 ## 6. Jak przetestować podatność (przykład: NoSQLi)

@@ -15,7 +15,7 @@
 | 5 | Arbitrary File Read / Write | `bbq_fileio` | *(do ustalenia)* | ⬜ do zrobienia |Wojtek |
 | 6 | Race Conditions | `bbq_race` | *(do ustalenia)* | ⬜ do zrobienia | Radek |
 | 7 | Problem N+1 | `bbq_nplusone` | `GET /api/orders` | ✅ gotowe | Michał |
-| 8 | Nieograniczona współbieżność / wielokrotne wykonanie | `bbq_concurrency` | *(do ustalenia)* | ⬜ do zrobienia | Michał |
+| 8 | Nieograniczona współbieżność / wielokrotne wykonanie | `bbq_concurrency` | `POST /api/orders` | ✅ gotowe | Michał |
 | 9 | Deskryptory plików i gniazd | `bbq_fdleak` | *(do ustalenia)* | ⬜ do zrobienia | Patryk |
 
 Legenda: ✅ gotowe · 🟡 w trakcie · ⬜ do zrobienia

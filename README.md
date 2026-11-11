@@ -110,6 +110,7 @@ Endpoint `GET /api/modules` zwraca aktywne warianty, a frontend pokazuje je na s
 
 - [docs/URUCHOMIENIE.md](docs/URUCHOMIENIE.md) – instrukcja uruchomienia krok po kroku (wymagania, Docker, tryb dev).
 - [docs/podatnosci/Nplusone.md](docs/podatnosci/Nplusone.md) – opis problemu N+1 i demonstracja wariantów.
+- [docs/podatnosci/Concurrency.md](docs/podatnosci/Concurrency.md) – opis idempotencji i ograniczania współbieżności.
 - [docs/PLAN.md](docs/PLAN.md) – plan implementacji i status modułów.
 - [docs/architecture.svg](docs/architecture.svg) – diagram architektury.
 

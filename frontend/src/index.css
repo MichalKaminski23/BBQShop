@@ -170,6 +170,38 @@ code {
   cursor: progress;
 }
 
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.button-secondary {
+  padding: 0.6rem 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.result-box {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.result-box--created {
+  background: var(--ok-bg);
+}
+
+.result-box--reused {
+  background: var(--off-bg);
+}
+
 .status-list,
 .module-list,
 .product-grid {

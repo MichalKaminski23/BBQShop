@@ -7,6 +7,7 @@ requires-python = ">=3.13"
 dependencies = [
     "bbq-api",
     "bbq-core",
+    "bbq-concurrency",
     "bbq-db",
     "bbq-nosqli",
     "bbq-nplusone",
@@ -32,6 +33,7 @@ members = ["packages/*"]
 
 [tool.uv.sources]
 bbq-api = { workspace = true }
+bbq-concurrency = { workspace = true }
 bbq-core = { workspace = true }
 bbq-db = { workspace = true }
 bbq-nosqli = { workspace = true }
@@ -55,7 +57,15 @@ allowed-confusables = ["–"]
 [tool.mypy]
 strict = true
 python_version = "3.13"
-packages = ["bbq_core", "bbq_db", "bbq_api", "bbq_sqli", "bbq_nosqli", "bbq_nplusone"]
+packages = [
+    "bbq_core",
+    "bbq_db",
+    "bbq_api",
+    "bbq_sqli",
+    "bbq_nosqli",
+    "bbq_nplusone",
+    "bbq_concurrency",
+]
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]

@@ -49,6 +49,16 @@ export interface OrdersResult {
   metrics: QueryMetrics
 }
 
+export interface OrderRequest {
+  customer_name: string
+  items: Array<{ product_id: number; quantity: number }>
+}
+
+export interface CreateOrderResult {
+  order: Order
+  created: boolean
+}
+
 export class ApiError extends Error {
   readonly status: number
 
@@ -116,6 +126,21 @@ export const api = {
         timeMs: queryTime === null ? null : Number(queryTime),
       },
     }
+  },
+  createOrder: async (payload: OrderRequest, idempotencyKey: string): Promise<CreateOrderResult> => {
+    const response = await fetch('/api/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Idempotency-Key': idempotencyKey,
+      },
+      body: JSON.stringify(payload),
+    })
+    const body: unknown = await response.json().catch(() => null)
+    if (!response.ok) {
+      throw new ApiError(response.status, describeError(body) ?? response.statusText)
+    }
+    return body as CreateOrderResult
   },
   login: (username: string, password: string) =>
     post<LoginResult>('/login', { username, password }),
