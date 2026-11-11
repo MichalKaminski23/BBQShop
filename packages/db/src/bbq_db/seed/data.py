@@ -15,7 +15,7 @@ PRODUCTS: list[dict[str, Any]] = [
         "name": "Grill gazowy Flame 3",
         "category": "Grille",
         "price": Decimal("2499.00"),
-        "stock": 1, 
+        "stock": 1,
         "description": "Trzy palniki, boczna półka i ruszt żeliwny.",
     },
     {

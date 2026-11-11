@@ -19,7 +19,7 @@ async def _count(session: AsyncSession, model: type[object]) -> int:
 
 
 async def test_postgres_seed_is_complete_and_idempotent(db_session: AsyncSession) -> None:
-    await seed_postgres(db_session) 
+    await seed_postgres(db_session)
 
     assert await _count(db_session, Product) == len(PRODUCTS)
     assert await _count(db_session, AdminSecret) == len(SECRETS)

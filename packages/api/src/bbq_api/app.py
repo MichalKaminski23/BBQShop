@@ -66,6 +66,7 @@ def create_app(settings: Settings | None = None, modules: list[BBQModule] | None
         response.headers["X-SQL-Query-Count"] = str(metrics.count)
         response.headers["X-SQL-Query-Time-Ms"] = f"{metrics.elapsed_ms:.2f}"
         return response
+
     app.include_router(system.router, prefix=API_PREFIX)
 
     for item in active:

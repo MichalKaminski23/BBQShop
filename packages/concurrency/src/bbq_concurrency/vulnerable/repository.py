@@ -1,4 +1,4 @@
-"""Wersja PODATNA – każde powtórzenie żądania tworzy nowe zamówienie."""
+"""Wersja PODATNA - każde powtórzenie żądania tworzy nowe zamówienie."""
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession

@@ -7,12 +7,14 @@ from uuid import uuid4
 
 import httpx
 import pytest
-from sqlalchemy.ext.asyncio import AsyncEngine
+from sqlalchemy import delete
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
 
 from bbq_api import create_app
 from bbq_concurrency import module
 from bbq_core.config import Settings
 from bbq_core.module import Variant
+from bbq_db.models import Order
 
 pytestmark = pytest.mark.integration
 
@@ -35,6 +37,14 @@ def client_for(pg_engine: AsyncEngine, postgres_dsn: str, mongo_uri: str) -> Cli
                 yield client
 
     return factory
+
+
+@pytest.fixture(autouse=True)
+async def remove_orders_created_by_test(pg_engine: AsyncEngine) -> AsyncIterator[None]:
+    yield
+    async with AsyncSession(pg_engine) as session:
+        await session.execute(delete(Order).where(Order.customer_name.like("Concurrency test %")))
+        await session.commit()
 
 
 @pytest.mark.parametrize(

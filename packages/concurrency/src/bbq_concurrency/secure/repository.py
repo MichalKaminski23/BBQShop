@@ -1,4 +1,4 @@
-"""Wersja POPRAWIONA – idempotencja i limit równoległych operacji."""
+"""Wersja POPRAWIONA - idempotencja i limit równoległych operacji."""
 
 import asyncio
 

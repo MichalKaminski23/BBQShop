@@ -40,9 +40,7 @@ zapytanie o pozycje każdego zamówienia:
 ```python
 orders = await session.scalars(select(Order).order_by(Order.id))
 for order in orders:
-    items = await session.scalars(
-        select(OrderItem).where(OrderItem.order_id == order.id)
-    )
+    items = await session.scalars(select(OrderItem).where(OrderItem.order_id == order.id))
 ```
 
 Dla 12 zamówień oznacza to:

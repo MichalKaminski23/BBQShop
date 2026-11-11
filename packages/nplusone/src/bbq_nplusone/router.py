@@ -1,4 +1,4 @@
-"""Endpointy modułu N+1 – implementacja zależy od wariantu z ``.env``."""
+"""Endpointy modułu N+1 - implementacja zależy od wariantu z ``.env``."""
 
 from fastapi import APIRouter
 
