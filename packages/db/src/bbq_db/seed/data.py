@@ -15,7 +15,7 @@ PRODUCTS: list[dict[str, Any]] = [
         "name": "Grill gazowy Flame 3",
         "category": "Grille",
         "price": Decimal("2499.00"),
-        "stock": 1,  # ostatnia sztuka – do demonstracji race condition
+        "stock": 1,
         "description": "Trzy palniki, boczna półka i ruszt żeliwny.",
     },
     {
@@ -61,20 +61,25 @@ SECRETS: list[dict[str, Any]] = [
 ]
 
 COUPONS: list[dict[str, Any]] = [
-    # Kupon jednorazowy – do demonstracji race condition.
     {"code": "GRILL10", "discount_percent": 10, "uses_left": 1},
     {"code": "LATO2026", "discount_percent": 5, "uses_left": 100},
 ]
 
-# Zamówienia: (klient, [(nazwa produktu, ilość), ...]) – do demonstracji N+1.
 ORDERS: list[tuple[str, list[tuple[str, int]]]] = [
     ("Jan Kowalski", [("Grill węglowy Kettle 57 cm", 1), ("Węgiel drzewny dębowy 10 kg", 2)]),
     ("Anna Nowak", [("Brykiet kokosowy 5 kg", 3), ("Szczypce do grilla 45 cm", 1)]),
     ("Piotr Wiśniewski", [("Termometr do mięsa Bluetooth", 1), ("Sos BBQ Smoky Hickory", 4)]),
     ("Ewa Zielińska", [("Sos BBQ Smoky Hickory", 2)]),
+    ("Tomasz Wójcik", [("Grill gazowy Flame 3", 1), ("Węgiel drzewny dębowy 10 kg", 1)]),
+    ("Katarzyna Mazur", [("Brykiet kokosowy 5 kg", 2), ("Sos BBQ Smoky Hickory", 1)]),
+    ("Marek Kaczmarek", [("Grill węglowy Kettle 57 cm", 1)]),
+    ("Natalia Pawlak", [("Szczypce do grilla 45 cm", 2), ("Termometr do mięsa Bluetooth", 1)]),
+    ("Robert Król", [("Węgiel drzewny dębowy 10 kg", 3)]),
+    ("Joanna Wieczorek", [("Grill gazowy Flame 3", 1), ("Sos BBQ Smoky Hickory", 2)]),
+    ("Paweł Dudek", [("Brykiet kokosowy 5 kg", 4)]),
+    ("Agnieszka Lis", [("Grill węglowy Kettle 57 cm", 1), ("Szczypce do grilla 45 cm", 1)]),
 ]
 
-# Użytkownicy MongoDB: (login, hasło, rola).
 USERS: list[tuple[str, str, str]] = [
     ("admin", "Admin123!", "admin"),
     ("jan", "grill2026", "customer"),

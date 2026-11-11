@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 
 class LoginRequest(BaseModel):
-    """Dane logowania wymuszone jako tekst (wariant poprawiony)."""
+    """Dane logowania wymuszone jako tekst."""
 
     username: str
     password: str

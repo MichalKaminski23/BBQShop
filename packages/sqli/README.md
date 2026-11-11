@@ -2,6 +2,10 @@
 
 Wyszukiwarka produktów: `GET /api/products/search?q=<fraza>`.
 
+Praktyczny scenariusz demonstracyjny znajduje się w
+[docs/podatnosci/SQLi.md](../../docs/podatnosci/SQLi.md). Ten plik opisuje
+implementację i testy paczki.
+
 Wariant ustawiasz w `.env`:
 
 ```

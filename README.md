@@ -39,8 +39,6 @@ Każda podatność występuje w dwóch wariantach: **podatnym** i **poprawionym*
 
 ## Architektura
 
-Zgodnie z uwagami z 19.10:
-
 - Projekt jest podzielony na **osobne paczki (moduły Pythonowe)** w [uv workspace](https://docs.astral.sh/uv/concepts/projects/workspaces/), po jednej na każdą podatność.
 - **FastAPI** pełni rolę warstwy łączącej moduły i wystawia ich funkcje przez API dla frontendu w React.
 - Każdy moduł ma **testy automatyczne**, które sprawdzają zarówno wersję podatną, jak i poprawioną.
@@ -110,9 +108,7 @@ Endpoint `GET /api/modules` zwraca aktywne warianty, a frontend pokazuje je na s
 
 ## Dokumentacja
 
-- [docs/URUCHOMIENIE.md](docs/URUCHOMIENIE.md) – instrukcja uruchomienia krok po kroku (wymagania, Docker, tryb dev).
-- [docs/PLAN.md](docs/PLAN.md) – plan implementacji i status modułów.
-- [docs/architecture.svg](docs/architecture.svg) – diagram architektury.
+- [docs/README.md](docs/README.md) – indeks całej dokumentacji.
 
 ## Jak uruchomić
 
@@ -184,10 +180,3 @@ API odkrywa moduł automatycznie. Nie trzeba zmieniać kodu `bbq_api`.
 ## Repozytorium
 
 https://github.com/MichalKaminski23/BBQShop
-
-## Harmonogram
-
-| Data  | Wydarzenie                                                          |
-|-------|---------------------------------------------------------------------|
-| 19.10 | Uwagi do projektu: podział na moduły, testy, FastAPI jako warstwa łącząca |
-| 02.11 | Spotkanie (zdalnie)                                                 |

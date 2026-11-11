@@ -10,6 +10,8 @@ export function Layout() {
             Moduły
           </NavLink>
           <NavLink to="/shop">Sklep</NavLink>
+          <NavLink to="/orders">Zamówienia</NavLink>
+          <NavLink to="/concurrency">Współbieżność</NavLink>
           <NavLink to="/login">Logowanie</NavLink>
         </nav>
       </header>
@@ -17,7 +19,7 @@ export function Layout() {
         <Outlet />
       </main>
       <footer className="footer">
-        Projekt edukacyjny TBO – aplikacja celowo zawiera podatności.
+        Projekt edukacyjny TBO - aplikacja celowo zawiera podatności.
       </footer>
     </div>
   )

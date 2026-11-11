@@ -1,4 +1,4 @@
-"""Endpointy modułu SQLi – implementacja zależy od wariantu z ``.env``."""
+"""Endpointy modułu SQLi - implementacja zależy od wariantu z ``.env``."""
 
 from typing import Annotated
 

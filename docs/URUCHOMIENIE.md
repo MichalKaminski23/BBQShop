@@ -1,209 +1,239 @@
-# Jak uruchomić BBQShop
+# Uruchomienie i codzienna praca
 
-Przewodnik krok po kroku: co zainstalować i co po kolei wpisać, żeby odpalić aplikację.
+Ta strona zawiera wspólne komendy dla całego projektu. Instrukcje
+demonstracji konkretnych podatności znajdują się w
+[indeksie dokumentacji](README.md).
 
-> ⚠️ Projekt jest **celowo podatny** i służy wyłącznie do nauki (TBO). Uruchamiaj go tylko lokalnie, nigdy nie wystawiaj do internetu.
+> Projekt jest celowo podatny i służy wyłącznie do nauki. Uruchamiaj go
+> lokalnie i nie wystawiaj publicznie do internetu.
 
-## Architektura w skrócie
+## Wymagania
 
-![Architektura BBQShop](architecture.svg)
+- Docker z Docker Compose,
+- `uv`,
+- Node 24 (tylko przy lokalnym uruchamianiu frontendu),
+- Git.
 
-Przeglądarka (React) → FastAPI (`bbq_api`) → moduły podatności (np. `bbq_sqli`, `bbq_nosqli`) → wspólne `bbq_core` i `bbq_db` → PostgreSQL i MongoDB. Każdy moduł ma wersję **podatną** i **poprawioną**, wybieraną w pliku `.env`.
+Sprawdzenie instalacji:
 
----
-
-## 1. Co zainstalować (wymagania)
-
-| Narzędzie | Do czego | Link |
-|-----------|----------|------|
-| **Docker** (z Docker Compose) | uruchomienie baz i całej aplikacji w kontenerach | https://www.docker.com/products/docker-desktop/ |
-| **uv** | menedżer Pythona i zależności (backend) | https://docs.astral.sh/uv/ |
-| **Node 24** | frontend (tylko w trybie deweloperskim) | https://nodejs.org/ |
-| **Git** | pobranie repozytorium | https://git-scm.com/ |
-
-Sprawdzenie, czy wszystko jest zainstalowane:
-
-```bash
+```powershell
 docker --version
 docker compose version
 uv --version
 node --version
 ```
 
-Pobranie repozytorium (jeśli jeszcze go nie masz):
+## Konfiguracja
 
-```bash
-git clone https://github.com/MichalKaminski23/BBQShop.git
-cd BBQShop
+Utwórz lokalny plik konfiguracyjny:
+
+```powershell
+Copy-Item .env.example .env
 ```
 
----
+W `.env` wybierasz wariant każdego modułu:
 
-## 2. Konfiguracja – plik `.env`
-
-Skopiuj przykładowy plik konfiguracyjny:
-
-```bash
-cp .env.example .env
-```
-
-W pliku `.env` ustawiasz, w jakiej wersji działa każdy moduł. Wartości: `vulnerable` (podatny), `secure` (poprawiony), `off` (wyłączony).
-
-```
+```dotenv
+BBQ_DEFAULT_VARIANT=secure
 BBQ_MODULE_SQLI=vulnerable
 BBQ_MODULE_NOSQLI=vulnerable
+BBQ_MODULE_NPLUSONE=vulnerable
+BBQ_MODULE_CONCURRENCY=secure
 ```
 
----
+Dostępne wartości to `vulnerable`, `secure` i `off`.
+`BBQ_DB_METRICS=true` włącza demonstracyjne nagłówki i logowanie zapytań
+SQL dla zakładki Zamówienia. Domyślnie pozostaw tę opcję wyłączoną.
 
-## 3. Uruchomienie – wariant A: wszystko w Dockerze (najprościej)
+## Uruchomienie w Dockerze
 
-Jedna komenda buduje i startuje bazy, backend i frontend:
+Z głównego katalogu repozytorium:
 
-```bash
-docker compose up --build
-```
-
-Dodaj `-d`, żeby uruchomić w tle:
-
-```bash
+```powershell
 docker compose up --build -d
 ```
 
-Gdy kontenery wstaną, aplikacja jest pod adresami:
+Adresy:
 
-| Co | Adres |
-|----|-------|
-| Frontend (sklep) | http://localhost:5173 |
+| Usługa | Adres |
+|---|---|
+| Frontend | http://localhost:5173 |
+| Sklep | http://localhost:5173/shop |
+| Zamówienia | http://localhost:5173/orders |
+| Współbieżność | http://localhost:5173/concurrency |
 | Logowanie | http://localhost:5173/login |
-| API – dokumentacja (Swagger) | http://localhost:8000/docs |
-| API – stan usług | http://localhost:8000/api/health |
-| API – lista modułów i wariantów | http://localhost:8000/api/modules |
+| Swagger | http://localhost:8000/docs |
+| Stan usług | http://localhost:8000/api/health |
+| Aktywne moduły | http://localhost:8000/api/modules |
 
-Zatrzymanie:
+Przebuduj tylko API po zmianie backendu:
 
-```bash
+```powershell
+docker compose up --build -d api
+```
+
+Po zmianie samego `.env` odtwórz kontener API:
+
+```powershell
+docker compose up -d --force-recreate api
+```
+
+Po zmianie frontendu Vite zwykle odświeży stronę automatycznie. W razie
+problemu:
+
+```powershell
+docker compose restart frontend
+```
+
+## Zatrzymywanie i logi
+
+Zatrzymanie kontenerów z zachowaniem danych:
+
+```powershell
 docker compose down
 ```
 
----
+Zatrzymanie bez usuwania kontenerów:
 
-## 4. Uruchomienie – wariant B: tryb deweloperski
+```powershell
+docker compose stop
+```
 
-Bazy w Dockerze, backend i frontend lokalnie (wygodniejsze przy pisaniu kodu).
+Ponowne uruchomienie:
 
-**a) Wystartuj same bazy:**
+```powershell
+docker compose start
+```
 
-```bash
+Status:
+
+```powershell
+docker compose ps
+```
+
+Logi API:
+
+```powershell
+docker compose logs -f --tail=100 api
+```
+
+## Świeże dane testowe
+
+Seed uruchamia się tylko dla pustych tabel i kolekcji. Aby usunąć lokalne
+wolumeny i odtworzyć bazę od początku:
+
+```powershell
+docker compose down -v
+docker compose up --build -d
+```
+
+> `down -v` usuwa lokalne dane PostgreSQL i MongoDB.
+
+## Tryb deweloperski
+
+W tym trybie bazy działają w Dockerze, a API i frontend lokalnie.
+
+Terminal 1 — bazy:
+
+```powershell
 docker compose up -d postgres mongo
 ```
 
-**b) Zainstaluj zależności backendu i zrób migracje:**
+Terminal 2 — backend:
 
-```bash
+```powershell
 uv sync
-```
-
-```bash
 uv run alembic -c packages/db/alembic.ini upgrade head
-```
-
-**c) Uruchom API:**
-
-```bash
 uv run bbq-api
 ```
 
-API ruszy na http://localhost:8000/docs (dane przykładowe wczytują się same przy starcie).
+Terminal 3 — frontend:
 
-**d) W drugim terminalu uruchom frontend:**
-
-```bash
-cd frontend && npm install && npm run dev
+```powershell
+Set-Location frontend
+npm ci
+npm run dev
 ```
 
-Frontend ruszy na http://localhost:5173.
+API działa pod http://localhost:8000, a frontend pod
+http://localhost:5173. API i frontend zatrzymasz przez `Ctrl+C`.
 
----
+## Przełączanie wariantu modułu
 
-## 5. Przełączanie wersji modułu (podatna ↔ poprawiona)
+1. Zmień `BBQ_MODULE_<NAZWA>` w `.env`.
+2. W Dockerze wykonaj:
 
-1. Zmień wartość w `.env`, np. `BBQ_MODULE_NOSQLI=secure`.
-2. Przeładuj API:
-   - **Docker:** `docker compose up -d --force-recreate api`
-   - **Tryb deweloperski:** zatrzymaj `bbq-api` (Ctrl+C) i uruchom ponownie `uv run bbq-api`.
+   ```powershell
+   docker compose up -d --force-recreate api
+   ```
 
-Aktywny wariant sprawdzisz na http://localhost:8000/api/modules albo na stronie głównej.
+3. W trybie lokalnym zatrzymaj `bbq-api` i uruchom je ponownie:
 
----
+   ```powershell
+   uv run bbq-api
+   ```
 
-## 6. Jak przetestować podatność (przykład: NoSQLi)
+Aktywny wariant sprawdzisz na stronie głównej albo przez:
 
-Przy `BBQ_MODULE_NOSQLI=vulnerable` logowanie bez znajomości hasła:
-
-```bash
-curl -X POST http://localhost:8000/api/login -H "Content-Type: application/json" -d "{\"username\":\"admin\",\"password\":{\"$ne\":null}}"
+```text
+http://localhost:8000/api/modules
 ```
 
-➡️ Odpowiedź `{"username":"admin","role":"admin"}` — atak przeszedł.
+## Testy i jakość
 
-Po przełączeniu na `BBQ_MODULE_NOSQLI=secure` i przeładowaniu API ten sam atak zwróci `422`, a normalne logowanie (`admin` / `Admin123!`) dalej działa.
+Wszystkie testy:
 
-> W Windows `cmd` używaj podwójnych cudzysłowów z `\"` (jak wyżej) albo testuj przez Swagger: http://localhost:8000/docs.
-
-Konta testowe (kolekcja MongoDB `users`, hasła fikcyjne):
-
-| Login | Hasło | Rola |
-|-------|-----------|------|
-| `admin` | `Admin123!` | admin |
-| `jan` | `grill2026` | customer |
-| `anna` | `kielbaska` | customer |
-
----
-
-## 7. Dane w bazie danych (seed)
-
-Dane przykładowe są zapisane na sztywno w kodzie: [`packages/db/src/bbq_db/seed/data.py`](../packages/db/src/bbq_db/seed/data.py). Przy starcie API są wczytywane do baz, ale **tylko gdy tabela/kolekcja jest pusta** (seed jest idempotentny – nie dubluje danych przy ponownym uruchomieniu).
-
-**Każdy, kto odpali świeżo projekt, ma te same dane:** te same produkty, sekrety, kupony i zamówienia (PostgreSQL) oraz tych samych 3 użytkowników (MongoDB: `admin`, `jan`, `anna` – hasła i role w tabeli w sekcji 6).
-
-Dwie rzeczy warte uwagi:
-
-1. **Hash hasła jest inny u każdego.** Hasła są hashowane z losową solą, więc wartość `password_hash` w bazie różni się przy każdym seedowaniu – ale samo hasło (`Admin123!` itd.) jest to samo i logowanie działa identycznie. To celowe.
-2. **Dane przeżywają restart kontenerów.** Docker trzyma je w wolumenach (`postgres-data`, `mongo-data`). Jeśli raz uruchomiłeś projekt i coś w bazie zmieniłeś, kolejny `docker compose up` **nie zaseeduje** baz na nowo (nie są puste).
-
-Żeby wyczyścić bazy i dostać świeży, identyczny jak u wszystkich stan danych:
-
-```bash
-docker compose down -v
-```
-
-`-v` kasuje wolumeny, więc następny `docker compose up` wypełni bazy od zera. (Własne zmiany – dopisany user, zmieniony produkt – zobaczą inni dopiero po dodaniu ich do `data.py`.)
-
----
-
-## 8. Testy i jakość kodu
-
-```bash
+```powershell
 uv run pytest
 ```
 
-Testy integracyjne startują PostgreSQL i MongoDB w Dockerze (przez testcontainers). Bez Dockera uruchomisz same testy jednostkowe:
+Tylko testy bez Dockera:
 
-```bash
+```powershell
 uv run pytest -m "not integration"
 ```
 
-Lint i typy:
+Backend:
 
-```bash
-uv run ruff check . && uv run ruff format --check . && uv run mypy
+```powershell
+uv run ruff check .
+uv run ruff format --check .
+uv run mypy
 ```
 
----
+Frontend:
+
+```powershell
+Set-Location frontend
+npm run lint
+npm run typecheck
+npm run build
+```
+
+Hooki Git:
+
+```powershell
+uv run pre-commit install
+uv run pre-commit run --all-files
+```
+
+## Demonstracje
+
+Szczegółowe scenariusze są utrzymywane osobno:
+
+- [SQL Injection](podatnosci/SQLi.md)
+- [NoSQL Injection](podatnosci/NoSQLi.md)
+- [Problem N+1](podatnosci/Nplusone.md)
+- [Współbieżność i idempotencja](podatnosci/Concurrency.md)
 
 ## Najczęstsze problemy
 
-- **Pusta strona `/login` po dodaniu kodu w Dockerze** – Vite na Windows czasem nie wykrywa zmian plików. Przeładuj kontener: `docker compose restart frontend`, potem w przeglądarce `Ctrl+Shift+R`.
-- **`Internal Server Error` przy curl w `cmd`** – złe cudzysłowy. W `cmd` trzeba `-d "{\"klucz\":\"wartosc\"}"`, nie pojedynczych apostrofów.
-- **Port zajęty (5173 / 8000 / 5432 / 27017)** – zatrzymaj to, co używa portu, albo `docker compose down` i spróbuj ponownie.
+- **Port zajęty** — sprawdź proces używający portu albo wykonaj
+  `docker compose down`.
+- **Frontend nie widzi zmian w Dockerze** — wykonaj
+  `docker compose restart frontend` i odśwież stronę przez
+  `Ctrl+Shift+R`.
+- **Brak nowych danych seed** — seed działa tylko dla pustych baz; użyj
+  `docker compose down -v`, jeśli potrzebujesz świeżego stanu.
+- **Zmiana backendu nie jest widoczna** — przebuduj API przez
+  `docker compose up --build -d api`.

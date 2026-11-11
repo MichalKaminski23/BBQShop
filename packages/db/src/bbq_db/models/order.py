@@ -14,7 +14,6 @@ class Order(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     customer_name: Mapped[str] = mapped_column(String(120))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    # Klucz idempotencji – wersja poprawiona używa go, żeby nie złożyć zamówienia dwa razy.
     idempotency_key: Mapped[str | None] = mapped_column(String(64), unique=True)
 
     items: Mapped[list["OrderItem"]] = relationship(back_populates="order")

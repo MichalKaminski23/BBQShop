@@ -5,7 +5,8 @@ import asyncio
 from alembic import context
 from sqlalchemy.engine import Connection
 
-import bbq_db.models  # noqa: F401  (rejestruje tabele w Base.metadata)
+# Import models so Alembic metadata includes every table.
+import bbq_db.models  # noqa: F401
 from bbq_core.config import get_settings
 from bbq_core.db import create_engine
 from bbq_db.base import Base
