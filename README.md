@@ -39,8 +39,6 @@ Każda podatność występuje w dwóch wariantach: **podatnym** i **poprawionym*
 
 ## Architektura
 
-Zgodnie z uwagami z 19.10:
-
 - Projekt jest podzielony na **osobne paczki (moduły Pythonowe)** w [uv workspace](https://docs.astral.sh/uv/concepts/projects/workspaces/), po jednej na każdą podatność.
 - **FastAPI** pełni rolę warstwy łączącej moduły i wystawia ich funkcje przez API dla frontendu w React.
 - Każdy moduł ma **testy automatyczne**, które sprawdzają zarówno wersję podatną, jak i poprawioną.
@@ -111,6 +109,7 @@ Endpoint `GET /api/modules` zwraca aktywne warianty, a frontend pokazuje je na s
 ## Dokumentacja
 
 - [docs/URUCHOMIENIE.md](docs/URUCHOMIENIE.md) – instrukcja uruchomienia krok po kroku (wymagania, Docker, tryb dev).
+- [docs/podatnosci/Nplusone.md](docs/podatnosci/Nplusone.md) – opis problemu N+1 i demonstracja wariantów.
 - [docs/PLAN.md](docs/PLAN.md) – plan implementacji i status modułów.
 - [docs/architecture.svg](docs/architecture.svg) – diagram architektury.
 

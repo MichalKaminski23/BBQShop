@@ -9,6 +9,7 @@ dependencies = [
     "bbq-core",
     "bbq-db",
     "bbq-nosqli",
+    "bbq-nplusone",
     "bbq-sqli",
 ]
 
@@ -34,6 +35,7 @@ bbq-api = { workspace = true }
 bbq-core = { workspace = true }
 bbq-db = { workspace = true }
 bbq-nosqli = { workspace = true }
+bbq-nplusone = { workspace = true }
 bbq-sqli = { workspace = true }
 
 [tool.ruff]
@@ -53,7 +55,7 @@ allowed-confusables = ["–"]
 [tool.mypy]
 strict = true
 python_version = "3.13"
-packages = ["bbq_core", "bbq_db", "bbq_api", "bbq_sqli", "bbq_nosqli"]
+packages = ["bbq_core", "bbq_db", "bbq_api", "bbq_sqli", "bbq_nosqli", "bbq_nplusone"]
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]

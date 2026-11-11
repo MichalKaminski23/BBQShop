@@ -52,6 +52,8 @@ W pliku `.env` ustawiasz, w jakiej wersji działa każdy moduł. Wartości: `vul
 ```
 BBQ_MODULE_SQLI=vulnerable
 BBQ_MODULE_NOSQLI=vulnerable
+BBQ_MODULE_NPLUSONE=vulnerable
+BBQ_DB_METRICS=true       # opcjonalnie: metryki SQL w zakładce Zamówienia
 ```
 
 ---
@@ -75,6 +77,7 @@ Gdy kontenery wstaną, aplikacja jest pod adresami:
 | Co | Adres |
 |----|-------|
 | Frontend (sklep) | http://localhost:5173 |
+| Zamówienia (N+1) | http://localhost:5173/orders |
 | Logowanie | http://localhost:5173/login |
 | API – dokumentacja (Swagger) | http://localhost:8000/docs |
 | API – stan usług | http://localhost:8000/api/health |
@@ -134,6 +137,29 @@ Frontend ruszy na http://localhost:5173.
    - **Tryb deweloperski:** zatrzymaj `bbq-api` (Ctrl+C) i uruchom ponownie `uv run bbq-api`.
 
 Aktywny wariant sprawdzisz na http://localhost:8000/api/modules albo na stronie głównej.
+
+### Demonstracja problemu N+1
+
+1. W `.env` ustaw `BBQ_MODULE_NPLUSONE=vulnerable` oraz
+   `BBQ_DB_METRICS=true`.
+2. Otwórz http://localhost:5173/orders.
+3. Widok pokaże rzeczywistą liczbę i łączny czas zapytań SQL.
+   Dla 12 zamówień wariant podatny wykonuje 13 zapytań, a wariant poprawiony
+   wykonuje 2.
+4. Porównaj wariant poprawiony, zmieniając `BBQ_MODULE_NPLUSONE=secure` i
+   wykonując:
+
+   ```bash
+   docker compose up -d --force-recreate api
+   ```
+
+5. Szczegółowe zapytania zobaczysz w:
+
+   ```bash
+   docker compose logs -f --tail=0 api
+   ```
+
+Pełny opis znajduje się w [podatnosci/Nplusone.md](podatnosci/Nplusone.md).
 
 ---
 

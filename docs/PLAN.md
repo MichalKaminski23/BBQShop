@@ -8,15 +8,15 @@
 
 | # | Moduł | Pakiet | Endpoint | Status | Kto |
 |---|-------|--------|----------|--------|-----|
-| 1 | SQL Injection | `bbq_sqli` | `GET /api/products/search` | ✅ gotowe | — |
-| 2 | NoSQL Injection | `bbq_nosqli` | `POST /api/login` | ✅ gotowe | — |
-| 3 | Command Injection | `bbq_cmdi` | *(do ustalenia)* | ⬜ do zrobienia | — |
-| 4 | Path Traversal | `bbq_pathtraversal` | *(do ustalenia)* | ⬜ do zrobienia | — |
-| 5 | Arbitrary File Read / Write | `bbq_fileio` | *(do ustalenia)* | ⬜ do zrobienia | — |
-| 6 | Race Conditions | `bbq_race` | *(do ustalenia)* | ⬜ do zrobienia | — |
-| 7 | Problem N+1 | `bbq_nplusone` | *(do ustalenia)* | ⬜ do zrobienia | — |
-| 8 | Nieograniczona współbieżność / wielokrotne wykonanie | `bbq_concurrency` | *(do ustalenia)* | ⬜ do zrobienia | — |
-| 9 | Deskryptory plików i gniazd | `bbq_fdleak` | *(do ustalenia)* | ⬜ do zrobienia | — |
+| 1 | SQL Injection | `bbq_sqli` | `GET /api/products/search` | ✅ gotowe | Błażej |
+| 2 | NoSQL Injection | `bbq_nosqli` | `POST /api/login` | ✅ gotowe | Błażej |
+| 3 | Command Injection | `bbq_cmdi` | *(do ustalenia)* | ⬜ do zrobienia | Kuba |
+| 4 | Path Traversal | `bbq_pathtraversal` | *(do ustalenia)* | ⬜ do zrobienia | Kuba |
+| 5 | Arbitrary File Read / Write | `bbq_fileio` | *(do ustalenia)* | ⬜ do zrobienia |Wojtek |
+| 6 | Race Conditions | `bbq_race` | *(do ustalenia)* | ⬜ do zrobienia | Radek |
+| 7 | Problem N+1 | `bbq_nplusone` | `GET /api/orders` | ✅ gotowe | Michał |
+| 8 | Nieograniczona współbieżność / wielokrotne wykonanie | `bbq_concurrency` | *(do ustalenia)* | ⬜ do zrobienia | Michał |
+| 9 | Deskryptory plików i gniazd | `bbq_fdleak` | *(do ustalenia)* | ⬜ do zrobienia | Patryk |
 
 Legenda: ✅ gotowe · 🟡 w trakcie · ⬜ do zrobienia
 

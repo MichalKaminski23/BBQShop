@@ -72,6 +72,14 @@ ORDERS: list[tuple[str, list[tuple[str, int]]]] = [
     ("Anna Nowak", [("Brykiet kokosowy 5 kg", 3), ("Szczypce do grilla 45 cm", 1)]),
     ("Piotr Wiśniewski", [("Termometr do mięsa Bluetooth", 1), ("Sos BBQ Smoky Hickory", 4)]),
     ("Ewa Zielińska", [("Sos BBQ Smoky Hickory", 2)]),
+    ("Tomasz Wójcik", [("Grill gazowy Flame 3", 1), ("Węgiel drzewny dębowy 10 kg", 1)]),
+    ("Katarzyna Mazur", [("Brykiet kokosowy 5 kg", 2), ("Sos BBQ Smoky Hickory", 1)]),
+    ("Marek Kaczmarek", [("Grill węglowy Kettle 57 cm", 1)]),
+    ("Natalia Pawlak", [("Szczypce do grilla 45 cm", 2), ("Termometr do mięsa Bluetooth", 1)]),
+    ("Robert Król", [("Węgiel drzewny dębowy 10 kg", 3)]),
+    ("Joanna Wieczorek", [("Grill gazowy Flame 3", 1), ("Sos BBQ Smoky Hickory", 2)]),
+    ("Paweł Dudek", [("Brykiet kokosowy 5 kg", 4)]),
+    ("Agnieszka Lis", [("Grill węglowy Kettle 57 cm", 1), ("Szczypce do grilla 45 cm", 1)]),
 ]
 
 # Użytkownicy MongoDB: (login, hasło, rola).

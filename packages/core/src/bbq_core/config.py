@@ -28,6 +28,7 @@ class Settings(BaseSettings):
     mongo_db: str = "bbqshop"
     default_variant: Variant = Variant.SECURE
     seed_on_startup: bool = True
+    db_metrics: bool = False
     modules: dict[str, Variant] = Field(default_factory=dict)
 
     def variant_for(self, module_name: str) -> Variant:

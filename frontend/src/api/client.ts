@@ -25,6 +25,30 @@ export interface LoginResult {
   role: 'customer' | 'admin'
 }
 
+export interface OrderItem {
+  id: number
+  product_id: number
+  quantity: number
+  unit_price: string
+}
+
+export interface Order {
+  id: number
+  customer_name: string
+  created_at: string
+  items: OrderItem[]
+}
+
+export interface QueryMetrics {
+  count: number | null
+  timeMs: number | null
+}
+
+export interface OrdersResult {
+  orders: Order[]
+  metrics: QueryMetrics
+}
+
 export class ApiError extends Error {
   readonly status: number
 
@@ -76,6 +100,23 @@ export const api = {
   modules: () => request<ModuleInfo[]>('/modules'),
   searchProducts: (q: string) =>
     request<Product[]>(`/products/search?${new URLSearchParams({ q })}`),
+  orders: async (): Promise<OrdersResult> => {
+    const response = await fetch('/api/orders')
+    const body: unknown = await response.json().catch(() => null)
+    if (!response.ok) {
+      throw new ApiError(response.status, describeError(body) ?? response.statusText)
+    }
+
+    const queryCount = response.headers.get('X-SQL-Query-Count')
+    const queryTime = response.headers.get('X-SQL-Query-Time-Ms')
+    return {
+      orders: body as Order[],
+      metrics: {
+        count: queryCount === null ? null : Number(queryCount),
+        timeMs: queryTime === null ? null : Number(queryTime),
+      },
+    }
+  },
   login: (username: string, password: string) =>
     post<LoginResult>('/login', { username, password }),
 }
