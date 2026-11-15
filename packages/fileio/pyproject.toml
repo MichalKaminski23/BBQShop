@@ -1,0 +1,19 @@
+[project]
+name = "bbq-fileio"
+version = "0.1.0"
+description = "Moduł BBQShop: arbitrary file read/write w operacjach na plikach."
+requires-python = ">=3.13"
+dependencies = ["bbq-core"]
+
+[project.entry-points."bbqshop.modules"]
+fileio = "bbq_fileio:module"
+
+[tool.uv.sources]
+bbq-core = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/bbq_fileio"]

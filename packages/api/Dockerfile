@@ -11,6 +11,7 @@ COPY packages/core/pyproject.toml packages/core/
 COPY packages/db/pyproject.toml packages/db/
 COPY packages/api/pyproject.toml packages/api/
 COPY packages/concurrency/pyproject.toml packages/concurrency/
+COPY packages/fileio/pyproject.toml packages/fileio/
 COPY packages/sqli/pyproject.toml packages/sqli/
 COPY packages/nosqli/pyproject.toml packages/nosqli/
 COPY packages/nplusone/pyproject.toml packages/nplusone/

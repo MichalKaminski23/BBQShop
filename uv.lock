@@ -12,6 +12,7 @@ members = [
     "bbq-concurrency",
     "bbq-core",
     "bbq-db",
+    "bbq-fileio",
     "bbq-nosqli",
     "bbq-nplusone",
     "bbq-sqli",
@@ -253,6 +254,17 @@ requires-dist = [
 ]
 
 [[package]]
+name = "bbq-fileio"
+version = "0.1.0"
+source = { editable = "packages/fileio" }
+dependencies = [
+    { name = "bbq-core" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "bbq-core", editable = "packages/core" }]
+
+[[package]]
 name = "bbq-nosqli"
 version = "0.1.0"
 source = { editable = "packages/nosqli" }
@@ -306,6 +318,7 @@ dependencies = [
     { name = "bbq-concurrency" },
     { name = "bbq-core" },
     { name = "bbq-db" },
+    { name = "bbq-fileio" },
     { name = "bbq-nosqli" },
     { name = "bbq-nplusone" },
     { name = "bbq-sqli" },
@@ -328,6 +341,7 @@ requires-dist = [
     { name = "bbq-concurrency", editable = "packages/concurrency" },
     { name = "bbq-core", editable = "packages/core" },
     { name = "bbq-db", editable = "packages/db" },
+    { name = "bbq-fileio", editable = "packages/fileio" },
     { name = "bbq-nosqli", editable = "packages/nosqli" },
     { name = "bbq-nplusone", editable = "packages/nplusone" },
     { name = "bbq-sqli", editable = "packages/sqli" },

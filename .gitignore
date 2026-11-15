@@ -10,6 +10,9 @@ build/
 
 .env
 
+# Katalog roboczy modułu fileio (tworzony przy starcie API)
+fileio-data/
+
 node_modules/
 frontend/dist/
 
