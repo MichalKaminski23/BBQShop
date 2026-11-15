@@ -12,6 +12,7 @@ dependencies = [
     "bbq-fileio",
     "bbq-nosqli",
     "bbq-nplusone",
+    "bbq-race",
     "bbq-sqli",
 ]
 
@@ -40,6 +41,7 @@ bbq-db = { workspace = true }
 bbq-fileio = { workspace = true }
 bbq-nosqli = { workspace = true }
 bbq-nplusone = { workspace = true }
+bbq-race = { workspace = true }
 bbq-sqli = { workspace = true }
 
 [tool.ruff]
@@ -67,6 +69,7 @@ packages = [
     "bbq_nplusone",
     "bbq_concurrency",
     "bbq_fileio",
+    "bbq_race",
 ]
 plugins = ["pydantic.mypy"]
 

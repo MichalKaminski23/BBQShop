@@ -15,6 +15,7 @@ COPY packages/fileio/pyproject.toml packages/fileio/
 COPY packages/sqli/pyproject.toml packages/sqli/
 COPY packages/nosqli/pyproject.toml packages/nosqli/
 COPY packages/nplusone/pyproject.toml packages/nplusone/
+COPY packages/race/pyproject.toml packages/race/
 RUN uv sync --locked --no-dev --no-install-workspace
 
 COPY packages ./packages
