@@ -1,0 +1,11 @@
+# Race The Web v2 config.toml format (see upstream README).
+# This sends requests; use race_detector.py to reset DB and check the rule.
+count = 20
+verbose = true
+
+[[requests]]
+method = "POST"
+url = "http://localhost:8000/api/race/coupons/redeem"
+body = '{"code":"GRILL10"}'
+headers = ["Content-Type: application/json"]
+redirects = false
