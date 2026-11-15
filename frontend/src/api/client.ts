@@ -69,6 +69,16 @@ export interface CreateOrderResult {
   created: boolean
 }
 
+export interface Coupon {
+  code: string
+  discount_percent: number
+  uses_left: number
+}
+
+export interface Redemption extends Coupon {
+  message: string
+}
+
 export class ApiError extends Error {
   readonly status: number
 
@@ -156,4 +166,7 @@ export const api = {
   readFile: (name: string) => request<FileContent>(`/storage?${new URLSearchParams({ name })}`),
   writeFile: (name: string, content: string) =>
     post<WriteResult>(`/storage?${new URLSearchParams({ name })}`, { content }),
+  coupon: (code: string) => request<Coupon>(`/race/coupons/${encodeURIComponent(code)}`),
+  redeemCoupon: (code: string) => post<Redemption>('/race/coupons/redeem', { code }),
+  resetCoupon: () => post<Coupon>('/race/coupons/reset', {}),
 }
