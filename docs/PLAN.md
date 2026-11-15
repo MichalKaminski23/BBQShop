@@ -9,7 +9,7 @@
 | 3 | Command Injection | `bbq_cmdi` | do ustalenia | ⬜ do zrobienia | Kuba |
 | 4 | Path Traversal | `bbq_pathtraversal` | do ustalenia | ⬜ do zrobienia | Kuba |
 | 5 | Arbitrary File Read / Write | `bbq_fileio` | `GET/POST /api/storage` | 🟡 w trakcie | Wojtek |
-| 6 | Race Conditions | `bbq_race` | do ustalenia | ⬜ do zrobienia | Radek |
+| 6 | Race Conditions | `bbq_race` | `GET/POST /api/race/coupons` | ✅ gotowe | Radek |
 | 7 | Problem N+1 | `bbq_nplusone` | `GET /api/orders` | ✅ gotowe | Michał |
 | 8 | Wielokrotne wykonanie / współbieżność | `bbq_concurrency` | `POST /api/orders` | ✅ gotowe | Michał |
 | 9 | Deskryptory plików i gniazd | `bbq_fdleak` | do ustalenia | ⬜ do zrobienia | Patryk |
