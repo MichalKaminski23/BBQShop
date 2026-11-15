@@ -5,6 +5,7 @@ import { ConcurrencyPage } from './pages/ConcurrencyPage'
 import { LoginPage } from './pages/LoginPage'
 import { ModulesPage } from './pages/ModulesPage'
 import { OrdersPage } from './pages/OrdersPage'
+import { PromotionsPage } from './pages/PromotionsPage'
 import { ShopPage } from './pages/ShopPage'
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="shop" element={<ShopPage />} />
           <Route path="orders" element={<OrdersPage />} />
           <Route path="concurrency" element={<ConcurrencyPage />} />
+          <Route path="promocje" element={<PromotionsPage />} />
           <Route path="login" element={<LoginPage />} />
         </Route>
       </Routes>
