@@ -14,6 +14,7 @@ members = [
     "bbq-db",
     "bbq-nosqli",
     "bbq-nplusone",
+    "bbq-race",
     "bbq-sqli",
     "bbqshop",
 ]
@@ -283,6 +284,23 @@ requires-dist = [
 ]
 
 [[package]]
+name = "bbq-race"
+version = "0.1.0"
+source = { editable = "packages/race" }
+dependencies = [
+    { name = "bbq-core" },
+    { name = "bbq-db" },
+    { name = "sqlalchemy" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "bbq-core", editable = "packages/core" },
+    { name = "bbq-db", editable = "packages/db" },
+    { name = "sqlalchemy", specifier = ">=2.0" },
+]
+
+[[package]]
 name = "bbq-sqli"
 version = "0.1.0"
 source = { editable = "packages/sqli" }
@@ -308,6 +326,7 @@ dependencies = [
     { name = "bbq-db" },
     { name = "bbq-nosqli" },
     { name = "bbq-nplusone" },
+    { name = "bbq-race" },
     { name = "bbq-sqli" },
 ]
 
@@ -330,6 +349,7 @@ requires-dist = [
     { name = "bbq-db", editable = "packages/db" },
     { name = "bbq-nosqli", editable = "packages/nosqli" },
     { name = "bbq-nplusone", editable = "packages/nplusone" },
+    { name = "bbq-race", editable = "packages/race" },
     { name = "bbq-sqli", editable = "packages/sqli" },
 ]
 
