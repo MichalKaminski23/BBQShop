@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
+import { Link } from 'react-router'
 import { useState, type FormEvent } from 'react'
 
-import { api, ApiError } from '../api/client'
+import { api, ApiError, productImages } from '../api/client'
 
 const priceFormat = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' })
 
@@ -42,10 +43,17 @@ export function ShopPage() {
       <ul className="product-grid">
         {products.data?.map((product) => (
           <li key={`${product.id}-${product.name}`} className="product">
+            <Link to={`/shop/${product.id}`} className="product__link">
+              <img
+                className="product__image"
+                src={`/api/files/${productImages[product.id]}`}
+                alt=""
+              />
             <span className="product__category">{product.category}</span>
             <strong>{product.name}</strong>
             <p className="muted">{product.description}</p>
             <span className="product__price">{priceFormat.format(Number(product.price))}</span>
+            </Link>
           </li>
         ))}
       </ul>

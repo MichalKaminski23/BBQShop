@@ -41,5 +41,5 @@ GET /api/files/menu.txt
 Przykład obrazu:
 
 ```
-GET /api/files/2384db1abef65abbd670acb234121106.jpg
+GET /api/files/grill.svg
 ```

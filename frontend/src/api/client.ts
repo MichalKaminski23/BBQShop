@@ -20,6 +20,16 @@ export interface Product {
   description: string
 }
 
+export const productImages: Record<number, string> = {
+  1: 'grill.svg',
+  2: 'grill.svg',
+  3: 'fuel.svg',
+  4: 'fuel.svg',
+  5: 'accessories.svg',
+  6: 'accessories.svg',
+  7: 'sauce.svg',
+}
+
 export interface LoginResult {
   username: string
   role: 'customer' | 'admin'
