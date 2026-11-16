@@ -131,3 +131,76 @@
   background: var(--off-bg);
   color: var(--off);
 }
+
+.promotion-demo {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.promotion-demo__price,
+.promotion-demo__total {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0.4rem 0;
+}
+
+.promotion-demo__price--discount {
+  color: var(--muted);
+}
+
+.promotion-demo__total {
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--border);
+  font-size: 1.15rem;
+}
+
+.promotion-demo__total strong {
+  color: var(--accent);
+  font-size: 1.35rem;
+}
+
+.promotion-simulate {
+  justify-self: start;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.promotion-simulate:hover:not(:disabled) {
+  background: var(--accent);
+  color: white;
+}
+
+.promotion-simulate:disabled {
+  cursor: progress;
+  opacity: 0.65;
+}
+
+/* To enable the demo button manually, change display to inline-flex. */
+.promotion-simulate--hidden {
+  display: none;
+}
+
+.promotion-demo__message,
+.promotion-demo__hint {
+  margin: 0;
+  font-size: 0.88rem;
+}
+
+@media (max-width: 520px) {
+  .promotion-demo__price,
+  .promotion-demo__total {
+    font-size: 0.9rem;
+  }
+}
