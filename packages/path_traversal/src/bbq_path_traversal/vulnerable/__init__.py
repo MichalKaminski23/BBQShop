@@ -1,5 +1,5 @@
-"""Wersja podatna modułu SQLi (celowo, w celach edukacyjnych)."""
+"""Wersja podatna modułu path traversal (celowo, w celach edukacyjnych)."""
 
-from bbq_sqli.vulnerable.repository import VulnerableProductRepository
+from bbq_path_traversal.vulnerable.repository import VulnerableFileRepository
 
-__all__ = ["VulnerableProductRepository"]
+__all__ = ["VulnerableFileRepository"]

@@ -1,15 +1,16 @@
-"""Wspólny interfejs obu wariantów wyszukiwarki."""
+"""Wspólny interfejs obu wariantów odczytu plików."""
 
+from pathlib import Path
 from typing import Protocol
 
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from bbq_sqli.schemas import ProductOut
+class FileRepository(Protocol):
+    def __init__(self, base_dir: Path) -> None: ...
 
+    def path(self, file_path: str) -> Path:
+        """Zwraca ścieżkę do pliku wskazanego przez użytkownika."""
+        ...
 
-class ProductRepository(Protocol):
-    def __init__(self, session: AsyncSession) -> None: ...
-
-    async def search(self, query: str) -> list[ProductOut]:
-        """Zwraca produkty, których nazwa zawiera ``query`` (bez rozróżniania wielkości liter)."""
+    def read(self, file_path: str) -> str:
+        """Zwraca treść pliku wskazanego przez użytkownika."""
         ...

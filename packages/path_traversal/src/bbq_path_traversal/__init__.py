@@ -1,12 +1,12 @@
-"""SQL Injection w wyszukiwarce produktów."""
+"""Path traversal w endpointcie odczytu plików."""
 
 from bbq_core.module import BBQModule
-from bbq_sqli.router import build_router
+from bbq_path_traversal.router import build_router
 
 module = BBQModule(
-    name="sqli",
-    title="SQL Injection",
-    description="Wyszukiwarka produktów sklejająca zapytanie SQL z danych użytkownika.",
+    name="path_traversal",
+    title="Path Traversal",
+    description="Endpoint odczytu plików podatny na wyjście poza katalog bazowy.",
     build_router=build_router,
 )
 

@@ -1,34 +1,48 @@
-"""Endpointy modułu SQLi - implementacja zależy od wariantu z ``.env``."""
+"""Endpoint modułu path traversal - implementacja zależy od wariantu z ``.env``."""
 
+from pathlib import Path
 from typing import Annotated
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, HTTPException, status
+from fastapi import Path as PathParameter
+from fastapi.responses import FileResponse
 
-from bbq_core.deps import SessionDep
 from bbq_core.module import Variant
-from bbq_sqli.repository import ProductRepository
-from bbq_sqli.schemas import ProductOut
-from bbq_sqli.secure import MAX_QUERY_LENGTH, SecureProductRepository
-from bbq_sqli.vulnerable import VulnerableProductRepository
+from bbq_path_traversal.repository import FileRepository
+from bbq_path_traversal.schemas import FileOut
+from bbq_path_traversal.secure import SecureFileRepository
+from bbq_path_traversal.vulnerable import VulnerableFileRepository
 
-REPOSITORIES: dict[Variant, type[ProductRepository]] = {
-    Variant.VULNERABLE: VulnerableProductRepository,
-    Variant.SECURE: SecureProductRepository,
+BASE_DIR = Path(__file__).resolve().parent / "public"
+
+REPOSITORIES: dict[Variant, type[FileRepository]] = {
+    Variant.VULNERABLE: VulnerableFileRepository,
+    Variant.SECURE: SecureFileRepository,
 }
 
 
 def build_router(variant: Variant) -> APIRouter:
     repository_cls = REPOSITORIES[variant]
-    max_length = MAX_QUERY_LENGTH if variant is Variant.SECURE else None
+    router = APIRouter(prefix="/files", tags=["path-traversal"])
 
-    router = APIRouter(prefix="/products", tags=["sqli"])
-
-    @router.get("/search")
-    async def search_products(
-        session: SessionDep,
-        q: Annotated[str, Query(max_length=max_length, description="Fraza w nazwie")] = "",
-    ) -> list[ProductOut]:
-        """Wyszukuje produkty po nazwie."""
-        return await repository_cls(session).search(q)
+    @router.get("/{file_path:path}", response_model=FileOut)
+    def read_file(
+        file_path: Annotated[str, PathParameter(min_length=1, description="Ścieżka pliku")],
+    ) -> FileOut | FileResponse:
+        """Zwraca treść pliku demonstracyjnego."""
+        try:
+            repository = repository_cls(BASE_DIR)
+            file = repository.path(file_path)
+        except ValueError as exc:
+            raise HTTPException(
+                status.HTTP_400_BAD_REQUEST, "Niedozwolona ścieżka pliku"
+            ) from exc
+        except FileNotFoundError as exc:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "Plik nie istnieje") from exc
+        if file.suffix.lower() in {".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"}:
+            if not file.is_file():
+                raise HTTPException(status.HTTP_404_NOT_FOUND, "Plik nie istnieje")
+            return FileResponse(file)
+        return FileOut(filename=file_path, content=file.read_text(encoding="utf-8"))
 
     return router

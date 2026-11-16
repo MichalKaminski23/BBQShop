@@ -1,15 +1,10 @@
-"""Schematy odpowiedzi API modułu SQLi."""
-
-from decimal import Decimal
+"""Schematy odpowiedzi API modułu path traversal."""
 
 from pydantic import BaseModel, ConfigDict
 
 
-class ProductOut(BaseModel):
+class FileOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: int
-    name: str
-    category: str
-    price: Decimal
-    description: str
+    filename: str
+    content: str

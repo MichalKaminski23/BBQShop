@@ -1,5 +1,5 @@
-"""Wersja poprawiona modułu SQLi."""
+"""Wersja poprawiona modułu path traversal."""
 
-from bbq_sqli.secure.repository import MAX_QUERY_LENGTH, SecureProductRepository, escape_like
+from bbq_path_traversal.secure.repository import SecureFileRepository
 
-__all__ = ["MAX_QUERY_LENGTH", "SecureProductRepository", "escape_like"]
+__all__ = ["SecureFileRepository"]

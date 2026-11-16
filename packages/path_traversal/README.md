@@ -1,45 +1,45 @@
-# bbq-sqli: SQL Injection
+# bbq-path-traversal: Path Traversal
 
-Wyszukiwarka produktów: `GET /api/products/search?q=<fraza>`.
-
-Praktyczny scenariusz demonstracyjny znajduje się w
-[docs/podatnosci/SQLi.md](../../docs/podatnosci/SQLi.md). Ten plik opisuje
-implementację i testy paczki.
+Endpoint demonstracyjny: `GET /api/files/{ścieżka}`. Pliki graficzne (`jpg`,
+`png`, `gif`, `webp` i `svg`) są zwracane bezpośrednio jako obrazy, więc
+przeglądarka może je wyświetlić.
 
 Wariant ustawiasz w `.env`:
 
 ```
-BBQ_MODULE_SQLI=vulnerable   # vulnerable | secure | off
+BBQ_MODULE_PATH_TRAVERSAL=vulnerable   # vulnerable | secure | off
 ```
 
-## ❌ Wersja podatna ([vulnerable/repository.py](src/bbq_sqli/vulnerable/repository.py))
+## Wersja podatna
 
-Fraza jest wklejana w zapytanie SQL:
-
-```python
-f"... WHERE name ILIKE '%{query}%' ORDER BY id"
-```
-
-Apostrof kończy literał tekstowy, a dalsza część frazy wykonuje się jako SQL. Dzięki temu można np. dokleić `UNION SELECT` i odczytać tabelę `admin_secrets`, której nie zwraca żaden endpoint.
-
-**Przykładowy atak:**
+Wariant podatny dokleja podaną ścieżkę do katalogu `public`, ale jej nie
+normalizuje ani nie sprawdza. Sekwencja `..` pozwala wyjść poza ten katalog i
+odczytać pliki aplikacji:
 
 ```
-q = ' UNION SELECT id, name, 'leak', 0, value FROM admin_secrets--
+GET /api/files/../../README.md
 ```
 
-W odpowiedzi pole `description` zawiera wartości z tabeli `admin_secrets`.
+odczytanie pliku win.ini ()
 
-## ✅ Wersja poprawiona ([secure/repository.py](src/bbq_sqli/secure/repository.py))
+```
+GET /api/files/../../../../../../../../../../Windows/win.ini
+```
 
-- Zapytanie budowane przez SQLAlchemy. Fraza trafia do bazy jako **parametr**, nigdy jako fragment SQL.
-- Znaki `%` i `_` są escapowane, więc wzorzec `LIKE` traktuje je dosłownie.
-- Długość frazy jest ograniczona do 100 znaków (walidacja FastAPI zwraca 422).
+## Wersja poprawiona
 
-## Testy
+Wariant bezpieczny normalizuje ścieżkę przez `Path.resolve()` i odrzuca ją,
+jeśli wynik znajduje się poza katalogiem `public`. Próba odczytu pliku spoza
+dozwolonego katalogu zwraca `400`.
 
-[tests/test_sqli_repositories.py](tests/test_sqli_repositories.py) uruchamia te same scenariusze na obu wariantach:
+Przykład prawidłowego żądania:
 
-- zwykłe wyszukiwanie działa w obu,
-- payload UNION wycieka sekrety w `vulnerable`,
-- ten sam payload w `secure` jest zwykłym tekstem i nic nie zwraca.
+```
+GET /api/files/menu.txt
+```
+
+Przykład obrazu:
+
+```
+GET /api/files/2384db1abef65abbd670acb234121106.jpg
+```
