@@ -14,6 +14,7 @@ COPY packages/concurrency/pyproject.toml packages/concurrency/
 COPY packages/sqli/pyproject.toml packages/sqli/
 COPY packages/nosqli/pyproject.toml packages/nosqli/
 COPY packages/nplusone/pyproject.toml packages/nplusone/
+COPY packages/path_traversal/pyproject.toml packages/path_traversal/
 RUN uv sync --locked --no-dev --no-install-workspace
 
 COPY packages ./packages

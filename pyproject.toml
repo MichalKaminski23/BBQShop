@@ -12,6 +12,7 @@ dependencies = [
     "bbq-nosqli",
     "bbq-nplusone",
     "bbq-sqli",
+    "bbq_path_traversal",
 ]
 
 [dependency-groups]
@@ -39,6 +40,7 @@ bbq-db = { workspace = true }
 bbq-nosqli = { workspace = true }
 bbq-nplusone = { workspace = true }
 bbq-sqli = { workspace = true }
+bbq-path_traversal = {workspace = true}
 
 [tool.ruff]
 line-length = 100
@@ -64,6 +66,7 @@ packages = [
     "bbq_nosqli",
     "bbq_nplusone",
     "bbq_concurrency",
+    "bbq_path_traversal"
 ]
 plugins = ["pydantic.mypy"]
 

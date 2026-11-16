@@ -14,6 +14,7 @@ members = [
     "bbq-db",
     "bbq-nosqli",
     "bbq-nplusone",
+    "bbq-path-traversal",
     "bbq-sqli",
     "bbqshop",
 ]
@@ -283,6 +284,21 @@ requires-dist = [
 ]
 
 [[package]]
+name = "bbq-path-traversal"
+version = "0.1.0"
+source = { editable = "packages/path_traversal" }
+dependencies = [
+    { name = "bbq-core" },
+    { name = "bbq-db" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "bbq-core", editable = "packages/core" },
+    { name = "bbq-db", editable = "packages/db" },
+]
+
+[[package]]
 name = "bbq-sqli"
 version = "0.1.0"
 source = { editable = "packages/sqli" }
@@ -308,6 +324,7 @@ dependencies = [
     { name = "bbq-db" },
     { name = "bbq-nosqli" },
     { name = "bbq-nplusone" },
+    { name = "bbq-path-traversal" },
     { name = "bbq-sqli" },
 ]
 
@@ -330,6 +347,7 @@ requires-dist = [
     { name = "bbq-db", editable = "packages/db" },
     { name = "bbq-nosqli", editable = "packages/nosqli" },
     { name = "bbq-nplusone", editable = "packages/nplusone" },
+    { name = "bbq-path-traversal", editable = "packages/path_traversal" },
     { name = "bbq-sqli", editable = "packages/sqli" },
 ]
 
