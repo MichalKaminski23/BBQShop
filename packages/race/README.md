@@ -4,6 +4,24 @@ Moduł pokazuje wyścig TOCTOU podczas wykorzystania jednorazowego kuponu
 `GRILL10`. Kupon ma 10% rabatu i jedno dostępne użycie. Strona demonstracyjna
 jest dostępna pod `/promocje`.
 
+## Demonstracja na stronie
+
+Panel koszyka pokazuje przykładową cenę bazową 100 zł. Każde zaakceptowane
+wykorzystanie kuponu nalicza w tej demonstracji rabat 10 zł, a cena końcowa
+jest ograniczona do 0 zł. To wizualizacja skutku wyścigu, nie zapis zamówienia.
+
+Przycisk **Wykorzystaj kupon** wysyła pojedyncze żądanie. Przycisk
+**Symuluj 20 równoczesnych użyć** wysyła 20 żądań do API i wylicza cenę na
+podstawie odpowiedzi `200`. Odpowiedzi `409` są normalnym odrzuceniem żądania;
+błędy sieciowe i serwera są pokazywane jako niepełna symulacja. W `secure`
+powinno zostać zaakceptowane jedno żądanie, więc cena wyniesie 90 zł. W
+`vulnerable` zwykle zostanie zaakceptowanych kilka żądań, a przy co najmniej
+10 sukcesach cena spadnie do 0 zł. Wynik `vulnerable` zależy od współbieżności
+i obciążenia, dlatego użyj własnego detektora, by wykonać powtarzane serie.
+
+Przycisk **Resetuj kupon** przywraca kupon w bazie i czyści wynik wyświetlany
+przez bieżącą stronę. Reset nie zapisuje ani nie usuwa zamówień.
+
 ## Wybór wariantu
 
 W pliku `.env` ustaw jedną wartość:
