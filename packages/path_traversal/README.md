@@ -17,13 +17,7 @@ normalizuje ani nie sprawdza. Sekwencja `..` pozwala wyjść poza ten katalog i
 odczytać pliki aplikacji:
 
 ```
-GET /api/files/../../README.md
-```
-
-odczytanie pliku win.ini ()
-
-```
-GET /api/files/../../../../../../../../../../Windows/win.ini
+http://localhost:8000/api/files?path=../secure/repository.py
 ```
 
 ## Wersja poprawiona
@@ -35,11 +29,5 @@ dozwolonego katalogu zwraca `400`.
 Przykład prawidłowego żądania:
 
 ```
-GET /api/files/menu.txt
-```
-
-Przykład obrazu:
-
-```
-GET /api/files/grill.svg
+http://localhost:8000/api/files?path=grill.svg
 ```
