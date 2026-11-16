@@ -37,7 +37,7 @@ export function ProductPage() {
         <article className="product-detail">
           <img
             className="product-detail__image"
-            src={`/api/files/${productImages[product.data.id]}`}
+            src={`/api/files?path=${productImages[product.data.id]}`}
             alt={product.data.name}
           />
           <div>

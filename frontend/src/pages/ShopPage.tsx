@@ -46,7 +46,7 @@ export function ShopPage() {
             <Link to={`/shop/${product.id}`} className="product__link">
               <img
                 className="product__image"
-                src={`/api/files/${productImages[product.id]}`}
+                src={`/api/files?path=${productImages[product.id]}`}
                 alt=""
               />
             <span className="product__category">{product.category}</span>
