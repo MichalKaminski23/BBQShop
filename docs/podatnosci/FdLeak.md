@@ -32,6 +32,48 @@ Przy gniazdach każde żądanie tworzy lokalne połączenia TCP. W `vulnerable`
 połączenia pozostają w stanie `ESTABLISHED`; w `secure` są zamykane po
 przesłaniu znacznika.
 
+## Sprawdzanie deskryptorów w kontenerze
+
+Poniższe polecenia uruchamiaj z katalogu głównego repozytorium.
+
+### Gniazda
+
+```powershell
+docker compose exec api sh -c "grep ' 01 ' /proc/net/tcp"
+```
+
+Wpisy ze stanem `01` oznaczają połączenia `ESTABLISHED`. W wynikach będą
+również normalne połączenia API z PostgreSQL i MongoDB. Połączenia utworzone
+przez demonstrację mają adres loopback `127.0.0.1`, zapisywany w
+`/proc/net/tcp` jako `0100007F`.
+
+- `vulnerable`: po kliknięciu **Otwórz gniazda** wpisy loopback `0100007F`
+  pozostają aktywne,
+- `secure`: połączenia demonstracyjne są zamykane; wpisy mogą chwilowo
+  występować jako `TIME_WAIT` (stan `06`), ale nie powinny pozostawać jako
+  `ESTABLISHED` (`01`).
+
+Wpisy połączeń baz danych są prawidłowe i nie oznaczają wycieku modułu.
+
+### Pliki
+
+```powershell
+docker compose exec api sh -c "find /proc/[0-9]*/fd -lname /dev/null 2>/dev/null"
+```
+
+Każda linia wskazuje deskryptor procesu prowadzący do `/dev/null`. Wariant
+`vulnerable` otwiera dodatkowe pliki i przechowuje je w procesie API, dlatego
+liczba wpisów rośnie po kolejnych kliknięciach **Otwórz pliki**. Wariant
+`secure` zamyka pliki natychmiast, więc liczba pozostaje zasadniczo stała.
+
+Niektóre wpisy `/dev/null` mogą należeć do standardowych deskryptorów procesu,
+dlatego porównuj wynik przed i po demonstracji. Po demonstracji wariantu
+`vulnerable` wykonaj:
+
+```powershell
+docker compose restart api
+```
+
 ## Wybór wariantu
 
 W pliku `.env` ustaw:
