@@ -59,6 +59,12 @@ export interface CreateOrderResult {
   created: boolean
 }
 
+export interface ResourceDemoResult {
+  resource_type: 'file' | 'socket'
+  opened_count: number
+  closed_count: number
+}
+
 export class ApiError extends Error {
   readonly status: number
 
@@ -143,4 +149,8 @@ export const api = {
   },
   login: (username: string, password: string) =>
     post<LoginResult>('/login', { username, password }),
+  openFdleakFiles: (count: number) =>
+    request<ResourceDemoResult>(`/fdleak/file?${new URLSearchParams({ count: String(count) })}`),
+  openFdleakSockets: (count: number) =>
+    request<ResourceDemoResult>(`/fdleak/socket?${new URLSearchParams({ count: String(count) })}`),
 }

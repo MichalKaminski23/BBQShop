@@ -17,6 +17,7 @@ uruchomienia, a następnie przejdź do opisu konkretnej podatności.
 | NoSQL Injection | `bbq_nosqli` | `POST /api/login` | [NoSQLi.md](podatnosci/NoSQLi.md) |
 | Problem N+1 | `bbq_nplusone` | `GET /api/orders` | [Nplusone.md](podatnosci/Nplusone.md) |
 | Wielokrotne wykonanie i współbieżność | `bbq_concurrency` | `POST /api/orders` | [Concurrency.md](podatnosci/Concurrency.md) |
+| Deskryptory plików i gniazd | `bbq_fdleak` | `GET /api/fdleak/{file,socket}` | [FdLeak.md](podatnosci/FdLeak.md) |
 
 Pozostałe moduły są jeszcze w planie i pojawią się tutaj po implementacji.
 

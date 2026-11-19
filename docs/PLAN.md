@@ -12,7 +12,7 @@
 | 6 | Race Conditions | `bbq_race` | do ustalenia | ⬜ do zrobienia | Radek |
 | 7 | Problem N+1 | `bbq_nplusone` | `GET /api/orders` | ✅ gotowe | Michał |
 | 8 | Wielokrotne wykonanie / współbieżność | `bbq_concurrency` | `POST /api/orders` | ✅ gotowe | Michał |
-| 9 | Deskryptory plików i gniazd | `bbq_fdleak` | do ustalenia | ⬜ do zrobienia | Patryk |
+| 9 | Deskryptory plików i gniazd | `bbq_fdleak` | `GET /api/fdleak/{file,socket}` | ✅ gotowe | Patryk |
 
 Legenda: ✅ gotowe · 🟡 w trakcie · ⬜ do zrobienia
 
@@ -22,6 +22,7 @@ Dokumentacja gotowych modułów znajduje się w:
 - [NoSQL Injection](podatnosci/NoSQLi.md)
 - [Problem N+1](podatnosci/Nplusone.md)
 - [Współbieżność](podatnosci/Concurrency.md)
+- [Deskryptory plików i gniazd](podatnosci/FdLeak.md)
 
 ## Standard nowego modułu
 
@@ -90,8 +91,3 @@ nazwę, rozmiar i typ pliku.
 
 Kupon `GRILL10` i produkt z jednym stanem magazynowym. Wariant poprawiony
 powinien używać atomowego `UPDATE ... WHERE` albo blokady wiersza.
-
-### Deskryptory plików i gniazd (`bbq_fdleak`)
-
-Endpoint otwierający pliki lub gniazda. Wariant poprawiony powinien używać
-context managerów i gwarantować zamknięcie zasobów.
