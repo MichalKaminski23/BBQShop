@@ -10,7 +10,7 @@ class SecureResourceRepository:
     def open_file(self, count: int) -> ResourceDemoResult:
         closed_count = 0
         for _ in range(count):
-            with open(os.devnull, "r", encoding="utf-8"):
+            with open(os.devnull, encoding="utf-8"):
                 pass
             closed_count += 1
 

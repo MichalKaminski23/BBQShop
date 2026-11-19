@@ -2,8 +2,8 @@
 
 from bbq_core.module import Variant
 from bbq_fdleak.router import REPOSITORIES
-from bbq_fdleak.secure.repository import SecureResourceRepository as SecureRepository
 from bbq_fdleak.secure import SecureResourceRepository
+from bbq_fdleak.secure.repository import SecureResourceRepository as SecureRepository
 from bbq_fdleak.vulnerable import VulnerableResourceRepository
 from bbq_fdleak.vulnerable.repository import VulnerableResourceRepository as Repository
 

@@ -14,7 +14,7 @@ class VulnerableResourceRepository:
 
     def open_file(self, count: int) -> ResourceDemoResult:
         for _ in range(count):
-            opened = open(os.devnull, "r", encoding="utf-8")
+            opened = open(os.devnull, encoding="utf-8")  # noqa: SIM115
             self._open_files.append(opened)
 
         return ResourceDemoResult(
@@ -25,8 +25,8 @@ class VulnerableResourceRepository:
 
     def open_socket(self, count: int) -> ResourceDemoResult:
         for _ in range(count):
-            opened = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self._open_sockets.append(opened)
+            opened_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self._open_sockets.append(opened_socket)
 
         return ResourceDemoResult(
             resource_type="socket",
@@ -36,9 +36,9 @@ class VulnerableResourceRepository:
 
     def close_all(self) -> None:
         """Sprzatanie wyjatkowo potrzebne testom i restartom procesu demonstracyjnego."""
-        for opened in self._open_files:
-            opened.close()
-        for opened in self._open_sockets:
-            opened.close()
+        for opened_file in self._open_files:
+            opened_file.close()
+        for opened_socket in self._open_sockets:
+            opened_socket.close()
         self._open_files.clear()
         self._open_sockets.clear()

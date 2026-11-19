@@ -9,6 +9,7 @@ dependencies = [
     "bbq-core",
     "bbq-concurrency",
     "bbq-db",
+    "bbq-fdleak",
     "bbq-nosqli",
     "bbq-nplusone",
     "bbq-sqli",
@@ -36,6 +37,7 @@ bbq-api = { workspace = true }
 bbq-concurrency = { workspace = true }
 bbq-core = { workspace = true }
 bbq-db = { workspace = true }
+bbq-fdleak = { workspace = true }
 bbq-nosqli = { workspace = true }
 bbq-nplusone = { workspace = true }
 bbq-sqli = { workspace = true }
@@ -62,6 +64,7 @@ packages = [
     "bbq_api",
     "bbq_sqli",
     "bbq_nosqli",
+    "bbq_fdleak",
     "bbq_nplusone",
     "bbq_concurrency",
 ]
