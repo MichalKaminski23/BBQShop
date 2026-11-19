@@ -2,9 +2,6 @@
 
 from __future__ import annotations
 
-import socket
-from types import SimpleNamespace
-
 import httpx
 import pytest
 from fastapi import FastAPI
@@ -41,13 +38,12 @@ def install_fake_resources(monkeypatch: MonkeyPatch) -> list[FakeResource]:
 
     monkeypatch.setattr(vulnerable_repository, "open", create_resource, raising=False)
     monkeypatch.setattr(secure_repository, "open", create_resource, raising=False)
-    fake_socket_module = SimpleNamespace(
-        socket=create_resource,
-        AF_INET=socket.AF_INET,
-        SOCK_STREAM=socket.SOCK_STREAM,
-    )
-    monkeypatch.setattr(vulnerable_repository, "socket", fake_socket_module)
-    monkeypatch.setattr(secure_repository, "socket", fake_socket_module)
+
+    def create_connection() -> tuple[FakeResource, FakeResource]:
+        return create_resource(), create_resource()
+
+    monkeypatch.setattr(vulnerable_repository, "create_local_tcp_connection", create_connection)
+    monkeypatch.setattr(secure_repository, "create_local_tcp_connection", create_connection)
     return resources
 
 
@@ -68,14 +64,18 @@ async def test_resource_endpoint_matches_selected_variant(
         transport=httpx.ASGITransport(app=app), base_url="http://test"
     ) as client:
         response = await client.get(f"/api/fdleak/{resource_path}", params={"count": 3})
+        repeated_response = await client.get(f"/api/fdleak/{resource_path}", params={"count": 3})
 
     assert response.status_code == 200
     assert response.json() == {
         "resource_type": resource_path,
         "opened_count": 3,
         "closed_count": 3 if expected_closed else 0,
+        "outstanding_count": 0 if expected_closed else 3,
     }
-    assert len(resources) == 3
+    assert repeated_response.status_code == 200
+    assert repeated_response.json()["outstanding_count"] == (0 if expected_closed else 6)
+    assert len(resources) == (6 if resource_path == "file" else 12)
     assert all(resource.closed is expected_closed for resource in resources)
 
 

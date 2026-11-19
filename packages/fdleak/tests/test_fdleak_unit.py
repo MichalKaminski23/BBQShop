@@ -21,6 +21,7 @@ def test_vulnerable_file_leaves_resources_open() -> None:
         assert result.resource_type == "file"
         assert result.opened_count == 3
         assert result.closed_count == 0
+        assert result.outstanding_count == 3
         assert len(repository._open_files) == 3
     finally:
         repository.close_all()
@@ -34,7 +35,8 @@ def test_vulnerable_socket_leaves_resources_open() -> None:
         assert result.resource_type == "socket"
         assert result.opened_count == 3
         assert result.closed_count == 0
-        assert len(repository._open_sockets) == 3
+        assert result.outstanding_count == 3
+        assert len(repository._open_sockets) == 6
     finally:
         repository.close_all()
 
@@ -47,6 +49,7 @@ def test_secure_file_closes_resources() -> None:
     assert result.resource_type == "file"
     assert result.opened_count == 3
     assert result.closed_count == 3
+    assert result.outstanding_count == 0
 
 
 def test_secure_socket_closes_resources() -> None:
@@ -57,3 +60,4 @@ def test_secure_socket_closes_resources() -> None:
     assert result.resource_type == "socket"
     assert result.opened_count == 3
     assert result.closed_count == 3
+    assert result.outstanding_count == 0

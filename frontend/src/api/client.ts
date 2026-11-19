@@ -63,6 +63,7 @@ export interface ResourceDemoResult {
   resource_type: 'file' | 'socket'
   opened_count: number
   closed_count: number
+  outstanding_count: number
 }
 
 export class ApiError extends Error {

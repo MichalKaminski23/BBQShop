@@ -7,8 +7,10 @@ gniazdo. Jeśli aplikacja nie zamknie go po użyciu, zasób może pozostać zaj�
 aż do zakończenia procesu. Powtarzanie takiej operacji stopniowo zużywa pulę
 deskryptorów dostępnych dla procesu.
 
-Demonstracja otwiera pliki `/dev/null` i niepołączone gniazda TCP. Nie czyta
-plików użytkownika ani nie wysyła ruchu sieciowego.
+Demonstracja otwiera pliki `/dev/null` i tworzy lokalne połączenia TCP
+loopback. Każde połączenie przesyła krótki znacznik `bbq-fdleak-demo`, więc
+można obserwować rzeczywiste zestawianie połączeń i ruch TCP. Moduł nie czyta
+plików użytkownika ani nie łączy się z zewnętrzną siecią.
 
 ## Frontend
 
@@ -22,6 +24,13 @@ Wybierz liczbę zasobów od 1 do 100, a następnie użyj przycisku **Otwórz pli
 lub **Otwórz gniazda**. Odpowiedź pokazuje liczbę otwartych i zamkniętych
 zasobów. Możesz powtórzyć żądanie, aby zwiększyć liczbę utrzymywanych
 deskryptorów w wariancie podatnym.
+
+Pole **Pozostawione otwarte w tym procesie** rośnie po każdym żądaniu
+w wariancie podatnym. W wariancie poprawionym pozostaje równe zero.
+
+Przy gniazdach każde żądanie tworzy lokalne połączenia TCP. W `vulnerable`
+połączenia pozostają w stanie `ESTABLISHED`; w `secure` są zamykane po
+przesłaniu znacznika.
 
 ## Wybór wariantu
 

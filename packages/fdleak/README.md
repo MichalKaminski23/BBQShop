@@ -1,8 +1,9 @@
 # bbq-fdleak: deskryptory plików i gniazd
 
 Moduł pokazuje problem niepoprawnego zarządzania deskryptorami plików i gniazd.
-Wersja demonstracyjna działa na `/dev/null` i tworzy niepołączone gniazda TCP,
-nie odczytuje plików użytkownika ani nie łączy się z siecią.
+Wersja demonstracyjna działa na `/dev/null` i tworzy lokalne połączenia TCP
+loopback z krótką transmisją danych. Nie odczytuje plików użytkownika ani nie
+łączy się z zewnętrzną siecią.
 
 Frontendowy formularz jest dostępny pod adresem:
 
@@ -22,6 +23,10 @@ Liczba zasobów na żądanie jest ograniczona do 1–100.
 - `vulnerable` – zapisuje otwarte uchwyty w repozytorium i pozostawia je
   otwarte po odpowiedzi.
 - `secure` – zamyka pliki i gniazda przez context managery.
+
+Wynik pokazuje również `outstanding_count` — narastającą liczbę pozostawionych
+otwartych zasobów danego typu w procesie API. W wariancie podatnym licznik
+wzrasta po każdym żądaniu; w poprawionym pozostaje równy zero.
 
 Wariant podatny zajmuje deskryptory procesu API do czasu jego restartu.
 Z tego powodu moduł należy uruchamiać wyłącznie lokalnie lub w odizolowanym

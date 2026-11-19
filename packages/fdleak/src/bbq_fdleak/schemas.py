@@ -7,3 +7,4 @@ class ResourceDemoResult(BaseModel):
     resource_type: str
     opened_count: int = Field(ge=0)
     closed_count: int = Field(ge=0)
+    outstanding_count: int = Field(ge=0)

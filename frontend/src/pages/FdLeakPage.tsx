@@ -89,6 +89,10 @@ export function FdLeakPage() {
             Otwarto: <code>{demo.data.opened_count}</code>; zamknięto:{' '}
             <code>{demo.data.closed_count}</code>
           </p>
+          <p>
+            Pozostawione otwarte w tym procesie:{' '}
+            <strong>{demo.data.outstanding_count}</strong>
+          </p>
         </div>
       )}
 
