@@ -22,7 +22,7 @@ NameQuery = Annotated[str, Query(description="Nazwa pliku")]
 def build_router(variant: Variant) -> APIRouter:
     repository_cls = REPOSITORIES[variant]
     base = prepare(default_root())
-    router = APIRouter(prefix="/files", tags=["fileio"])
+    router = APIRouter(prefix="/storage", tags=["fileio"])
 
     @router.get("")
     async def read_file(name: NameQuery) -> FileContent:

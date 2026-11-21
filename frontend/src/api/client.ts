@@ -25,6 +25,16 @@ export interface LoginResult {
   role: 'customer' | 'admin'
 }
 
+export interface FileContent {
+  name: string
+  content: string
+}
+
+export interface WriteResult {
+  name: string
+  written: number
+}
+
 export interface OrderItem {
   id: number
   product_id: number
@@ -143,4 +153,7 @@ export const api = {
   },
   login: (username: string, password: string) =>
     post<LoginResult>('/login', { username, password }),
+  readFile: (name: string) => request<FileContent>(`/storage?${new URLSearchParams({ name })}`),
+  writeFile: (name: string, content: string) =>
+    post<WriteResult>(`/storage?${new URLSearchParams({ name })}`, { content }),
 }

@@ -6,7 +6,7 @@ import pytest
 
 from bbq_fileio.repository import FileRepository
 from bbq_fileio.secure import SecureFileRepository
-from bbq_fileio.storage import SAMPLE_NAME, SECRET_CONTENT, SECRET_NAME, prepare
+from bbq_fileio.storage import SECRET_CONTENT, SECRET_NAME, manual_name, prepare
 from bbq_fileio.vulnerable import VulnerableFileRepository
 
 BOTH = pytest.mark.parametrize(
@@ -22,8 +22,8 @@ def base(tmp_path: Path) -> Path:
 
 
 @BOTH
-def test_read_allowed_file(base: Path, repository_cls: type[FileRepository]) -> None:
-    assert "grill" in repository_cls(base).read(SAMPLE_NAME).content.lower()
+def test_read_product_manual(base: Path, repository_cls: type[FileRepository]) -> None:
+    assert "Instrukcja produktu #1" in repository_cls(base).read(manual_name(1)).content
 
 
 @BOTH
