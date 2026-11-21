@@ -1,5 +1,9 @@
 FROM ghcr.io/astral-sh/uv:0.13.1-python3.13-trixie-slim
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends iputils-ping \
+    && rm -rf /var/lib/apt/lists/*
+
 ENV UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
     UV_PYTHON_DOWNLOADS=0
@@ -11,6 +15,7 @@ COPY packages/core/pyproject.toml packages/core/
 COPY packages/db/pyproject.toml packages/db/
 COPY packages/api/pyproject.toml packages/api/
 COPY packages/concurrency/pyproject.toml packages/concurrency/
+COPY packages/cmdi/pyproject.toml packages/cmdi/
 COPY packages/fdleak/pyproject.toml packages/fdleak/
 COPY packages/fileio/pyproject.toml packages/fileio/
 COPY packages/sqli/pyproject.toml packages/sqli/

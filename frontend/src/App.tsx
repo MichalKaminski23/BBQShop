@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router'
 
 import { Layout } from './components/Layout'
 import { ConcurrencyPage } from './pages/ConcurrencyPage'
+import { CommandInjectionPage } from './pages/CommandInjectionPage'
 import { FdLeakPage } from './pages/FdLeakPage'
 import { FilesPage } from './pages/FilesPage'
 import { LoginPage } from './pages/LoginPage'
@@ -21,6 +22,7 @@ export default function App() {
           <Route path="shop/:productId" element={<ProductPage />} />
           <Route path="orders" element={<OrdersPage />} />
           <Route path="concurrency" element={<ConcurrencyPage />} />
+          <Route path="cmdi" element={<CommandInjectionPage />} />
           <Route path="fdleak" element={<FdLeakPage />} />
           <Route path="files" element={<FilesPage />} />
           <Route path="promocje" element={<PromotionsPage />} />
