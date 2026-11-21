@@ -1,0 +1,206 @@
+.promotions {
+  width: 100%;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.promotions__intro h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+.promotions__eyebrow {
+  margin: 0 0 0.25rem;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.promotion-card {
+  width: 100%;
+}
+
+.promotion-card__offer {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.promotion-card__discount {
+  display: grid;
+  width: 96px;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+.promotion-card__offer h2 {
+  margin: 0;
+  font-size: 1.7rem;
+  letter-spacing: 0.08em;
+}
+
+.promotion-card__availability {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.promotion-card__availability p {
+  margin: 0;
+}
+
+.promotion-reset {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.promotion-reset:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.promotion-reset:disabled {
+  cursor: progress;
+  opacity: 0.65;
+}
+
+.promotion-form {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.promotion-form__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.promotion-form input {
+  flex: 1;
+  min-width: 180px;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: inherit;
+  font: inherit;
+}
+
+.promotion-form button {
+  padding: 0.6rem 1rem;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: white;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.promotion-form button:disabled {
+  cursor: progress;
+  opacity: 0.65;
+}
+
+.promotion-card__variant {
+  margin: 1.5rem 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.promotion-notice {
+  padding: 0.75rem;
+  border-radius: 8px;
+  background: var(--off-bg);
+  color: var(--off);
+}
+
+.promotion-demo {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.promotion-demo__price,
+.promotion-demo__total {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0.4rem 0;
+}
+
+.promotion-demo__price--discount {
+  color: var(--muted);
+}
+
+.promotion-demo__total {
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--border);
+  font-size: 1.15rem;
+}
+
+.promotion-demo__total strong {
+  color: var(--accent);
+  font-size: 1.35rem;
+}
+
+.promotion-simulate {
+  justify-self: start;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.promotion-simulate:hover:not(:disabled) {
+  background: var(--accent);
+  color: white;
+}
+
+.promotion-simulate:disabled {
+  cursor: progress;
+  opacity: 0.65;
+}
+
+/* To enable the demo button manually, change display to inline-flex. */
+.promotion-simulate--hidden {
+  display: none;
+}
+
+.promotion-demo__message,
+.promotion-demo__hint {
+  margin: 0;
+  font-size: 0.88rem;
+}
+
+@media (max-width: 520px) {
+  .promotion-demo__price,
+  .promotion-demo__total {
+    font-size: 0.9rem;
+  }
+}

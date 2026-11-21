@@ -20,9 +20,29 @@ export interface Product {
   description: string
 }
 
+export const productImages: Record<number, string> = {
+  1: 'grill.svg',
+  2: 'grill.svg',
+  3: 'fuel.svg',
+  4: 'fuel.svg',
+  5: 'accessories.svg',
+  6: 'accessories.svg',
+  7: 'sauce.svg',
+}
+
 export interface LoginResult {
   username: string
   role: 'customer' | 'admin'
+}
+
+export interface FileContent {
+  name: string
+  content: string
+}
+
+export interface WriteResult {
+  name: string
+  written: number
 }
 
 export interface OrderItem {
@@ -64,6 +84,16 @@ export interface ResourceDemoResult {
   opened_count: number
   closed_count: number
   outstanding_count: number
+}
+
+export interface Coupon {
+  code: string
+  discount_percent: number
+  uses_left: number
+}
+
+export interface Redemption extends Coupon {
+  message: string
 }
 
 export class ApiError extends Error {
@@ -154,4 +184,10 @@ export const api = {
     request<ResourceDemoResult>(`/fdleak/file?${new URLSearchParams({ count: String(count) })}`),
   openFdleakSockets: (count: number) =>
     request<ResourceDemoResult>(`/fdleak/socket?${new URLSearchParams({ count: String(count) })}`),
+  readFile: (name: string) => request<FileContent>(`/storage?${new URLSearchParams({ name })}`),
+  writeFile: (name: string, content: string) =>
+    post<WriteResult>(`/storage?${new URLSearchParams({ name })}`, { content }),
+  coupon: (code: string) => request<Coupon>(`/race/coupons/${encodeURIComponent(code)}`),
+  redeemCoupon: (code: string) => post<Redemption>('/race/coupons/redeem', { code }),
+  resetCoupon: () => post<Coupon>('/race/coupons/reset', {}),
 }

@@ -13,6 +13,8 @@ export function Layout() {
           <NavLink to="/orders">Zamówienia</NavLink>
           <NavLink to="/concurrency">Współbieżność</NavLink>
           <NavLink to="/fdleak">Deskryptory</NavLink>
+          <NavLink to="/files">Instrukcje</NavLink>
+          <NavLink to="/promocje">Promocje</NavLink>
           <NavLink to="/login">Logowanie</NavLink>
         </nav>
       </header>
