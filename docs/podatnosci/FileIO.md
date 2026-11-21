@@ -23,7 +23,7 @@ W BBQShop podatne są **instrukcje produktów**: `GET /api/storage?name=<plik>` 
 Wariant podatny skleja ścieżkę wprost:
 
 ```python
-(base / name).read_text()     # odczyt
+(base / name).read_text()  # odczyt
 (base / name).write_text(...)  # zapis
 ```
 
