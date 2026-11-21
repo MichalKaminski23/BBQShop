@@ -9,8 +9,10 @@ dependencies = [
     "bbq-core",
     "bbq-concurrency",
     "bbq-db",
+    "bbq-fileio",
     "bbq-nosqli",
     "bbq-nplusone",
+    "bbq-race",
     "bbq-sqli",
     "bbq_path_traversal",
 ]
@@ -37,8 +39,10 @@ bbq-api = { workspace = true }
 bbq-concurrency = { workspace = true }
 bbq-core = { workspace = true }
 bbq-db = { workspace = true }
+bbq-fileio = { workspace = true }
 bbq-nosqli = { workspace = true }
 bbq-nplusone = { workspace = true }
+bbq-race = { workspace = true }
 bbq-sqli = { workspace = true }
 bbq-path_traversal = {workspace = true}
 
@@ -66,7 +70,9 @@ packages = [
     "bbq_nosqli",
     "bbq_nplusone",
     "bbq_concurrency",
-    "bbq_path_traversal"
+    "bbq_fileio",
+    "bbq_race",
+    "bbq_path_traversal",
 ]
 plugins = ["pydantic.mypy"]
 
