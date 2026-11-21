@@ -296,6 +296,52 @@ code {
   gap: 1rem;
 }
 
+.cmdi__form {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.cmdi__form input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: inherit;
+  font: inherit;
+}
+
+.cmdi__form button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cmdi__form button:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.cmdi__command,
+.cmdi__output {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  padding: 0.75rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+  font-size: 0.85rem;
+}
+
 .info-box {
   margin: 1rem 0;
   padding: 0.75rem 1rem;

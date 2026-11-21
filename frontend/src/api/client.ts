@@ -45,6 +45,13 @@ export interface WriteResult {
   written: number
 }
 
+export interface PingResult {
+  host: string
+  command: string
+  exit_code: number
+  output: string
+}
+
 export interface OrderItem {
   id: number
   product_id: number
@@ -187,6 +194,8 @@ export const api = {
   readFile: (name: string) => request<FileContent>(`/storage?${new URLSearchParams({ name })}`),
   writeFile: (name: string, content: string) =>
     post<WriteResult>(`/storage?${new URLSearchParams({ name })}`, { content }),
+  ping: (host: string) =>
+    request<PingResult>(`/cmdi/ping?${new URLSearchParams({ host })}`),
   coupon: (code: string) => request<Coupon>(`/race/coupons/${encodeURIComponent(code)}`),
   redeemCoupon: (code: string) => post<Redemption>('/race/coupons/redeem', { code }),
   resetCoupon: () => post<Coupon>('/race/coupons/reset', {}),
