@@ -8,7 +8,7 @@
 | 2 | NoSQL Injection | `bbq_nosqli` | `POST /api/login` | ✅ gotowe | Błażej |
 | 3 | Command Injection | `bbq_cmdi` | do ustalenia | ⬜ do zrobienia | Kuba |
 | 4 | Path Traversal | `bbq_pathtraversal` | do ustalenia | ⬜ do zrobienia | Kuba |
-| 5 | Arbitrary File Read / Write | `bbq_fileio` | do ustalenia | ⬜ do zrobienia | Wojtek |
+| 5 | Arbitrary File Read / Write | `bbq_fileio` | `GET/POST /api/storage` | 🟡 w trakcie | Wojtek |
 | 6 | Race Conditions | `bbq_race` | do ustalenia | ⬜ do zrobienia | Radek |
 | 7 | Problem N+1 | `bbq_nplusone` | `GET /api/orders` | ✅ gotowe | Michał |
 | 8 | Wielokrotne wykonanie / współbieżność | `bbq_concurrency` | `POST /api/orders` | ✅ gotowe | Michał |
@@ -83,8 +83,10 @@ Endpoint pobierający plik po nazwie. Wariant poprawiony powinien używać
 
 ### Arbitrary File Read / Write (`bbq_fileio`)
 
-Endpoint odczytu/zapisu pliku. Wariant poprawiony powinien ograniczać katalog,
-nazwę, rozmiar i typ pliku.
+Instrukcje produktów: `GET/POST /api/storage?name=<plik>`. Wariant podatny
+skleja nazwę wprost ze ścieżką (odczyt i zapis dowolnego pliku), poprawiony
+zawęża ścieżkę do katalogu instrukcji (`Path.resolve()` + `is_relative_to`).
+Scenariusz i payloady: [podatnosci/FileIO.md](podatnosci/FileIO.md).
 
 ### Race Conditions (`bbq_race`)
 
