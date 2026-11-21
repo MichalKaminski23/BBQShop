@@ -36,9 +36,9 @@ def build_router(variant: Variant) -> APIRouter:
             raise HTTPException(status.HTTP_400_BAD_REQUEST, "Niedozwolona ścieżka pliku") from exc
         except FileNotFoundError as exc:
             raise HTTPException(status.HTTP_404_NOT_FOUND, "Plik nie istnieje") from exc
+        if not file.is_file():
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "Plik nie istnieje")
         if file.suffix.lower() in {".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"}:
-            if not file.is_file():
-                raise HTTPException(status.HTTP_404_NOT_FOUND, "Plik nie istnieje")
             return FileResponse(file)
         return FileOut(filename=path, content=file.read_text(encoding="utf-8"))
 
