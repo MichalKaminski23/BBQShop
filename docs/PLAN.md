@@ -6,9 +6,9 @@
 |---|---|---|---|---|---|
 | 1 | SQL Injection | `bbq_sqli` | `GET /api/products/search` | ✅ gotowe | Błażej |
 | 2 | NoSQL Injection | `bbq_nosqli` | `POST /api/login` | ✅ gotowe | Błażej |
-| 3 | Command Injection | `bbq_cmdi` | do ustalenia | ⬜ do zrobienia | Kuba |
-| 4 | Path Traversal | `bbq_pathtraversal` | do ustalenia | ⬜ do zrobienia | Kuba |
-| 5 | Arbitrary File Read / Write | `bbq_fileio` | `GET/POST /api/storage` | 🟡 w trakcie | Wojtek |
+| 3 | Command Injection | `bbq_cmdi` | `GET /api/cmdi/ping` | ✅ gotowe | Kuba |
+| 4 | Path Traversal | `bbq_path_traversal` | `GET /api/files` | ✅ gotowe | Kuba |
+| 5 | Arbitrary File Read / Write | `bbq_fileio` | `GET/POST /api/storage` | ✅ gotowe | Wojtek |
 | 6 | Race Conditions | `bbq_race` | `GET/POST /api/race/coupons` | ✅ gotowe | Radek |
 | 7 | Problem N+1 | `bbq_nplusone` | `GET /api/orders` | ✅ gotowe | Michał |
 | 8 | Wielokrotne wykonanie / współbieżność | `bbq_concurrency` | `POST /api/orders` | ✅ gotowe | Michał |
@@ -16,10 +16,14 @@
 
 Legenda: ✅ gotowe · 🟡 w trakcie · ⬜ do zrobienia
 
-Dokumentacja gotowych modułów znajduje się w:
+Dokumentacja demonstracji modułów:
 
 - [SQL Injection](podatnosci/SQLi.md)
 - [NoSQL Injection](podatnosci/NoSQLi.md)
+- Command Injection — *dokument do uzupełnienia*
+- Path Traversal — *dokument do uzupełnienia*
+- [Arbitrary File Read / Write](podatnosci/FileIO.md)
+- [Race Conditions](podatnosci/RaceConditions.md)
 - [Problem N+1](podatnosci/Nplusone.md)
 - [Współbieżność](podatnosci/Concurrency.md)
 - [Deskryptory plików i gniazd](podatnosci/FdLeak.md)
@@ -70,26 +74,8 @@ Oba warianty powinny zachować ten sam kontrakt endpointu.
 API odkrywa moduły przez entry points. Nie należy dodawać ich ręcznie do
 `bbq_api`.
 
-## Pomysły dla pozostałych modułów
+## Status: wszystkie moduły gotowe
 
-### Command Injection (`bbq_cmdi`)
-
-Endpoint diagnostyczny uruchamiający polecenie systemowe. Wariant poprawiony
-powinien używać listy argumentów, bez `shell=True`, oraz whitelisty.
-
-### Path Traversal (`bbq_pathtraversal`)
-
-Endpoint pobierający plik po nazwie. Wariant poprawiony powinien używać
-`Path.resolve()` i sprawdzać katalog bazowy.
-
-### Arbitrary File Read / Write (`bbq_fileio`)
-
-Instrukcje produktów: `GET/POST /api/storage?name=<plik>`. Wariant podatny
-skleja nazwę wprost ze ścieżką (odczyt i zapis dowolnego pliku), poprawiony
-zawęża ścieżkę do katalogu instrukcji (`Path.resolve()` + `is_relative_to`).
-Scenariusz i payloady: [podatnosci/FileIO.md](podatnosci/FileIO.md).
-
-### Race Conditions (`bbq_race`)
-
-Kupon `GRILL10` i produkt z jednym stanem magazynowym. Wariant poprawiony
-powinien używać atomowego `UPDATE ... WHERE` albo blokady wiersza.
+Wszystkie 9 modułów jest zaimplementowanych (wariant podatny i poprawiony),
+zarejestrowanych przez entry points i dostępnych w API. Nie ma modułów
+pozostających do zrobienia.
