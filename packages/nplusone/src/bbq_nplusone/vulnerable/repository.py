@@ -11,8 +11,11 @@ class VulnerableOrderRepository:
     def __init__(self, session: AsyncSession) -> None:
         self._session = session
 
-    async def list_orders(self) -> list[OrderOut]:
-        orders = await self._session.scalars(select(Order).order_by(Order.id))
+    async def list_orders(self, customer_name: str | None = None) -> list[OrderOut]:
+        stmt = select(Order)
+        if customer_name is not None:
+            stmt = stmt.where(Order.customer_name == customer_name)
+        orders = await self._session.scalars(stmt.order_by(Order.id))
         result: list[OrderOut] = []
         for order in orders:
             items = await self._session.scalars(

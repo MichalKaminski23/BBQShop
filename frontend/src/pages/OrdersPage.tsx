@@ -1,3 +1,4 @@
+import { useState, type FormEvent } from 'react'
 import { useQuery } from '@tanstack/react-query'
 
 import { api, ApiError } from '../api/client'
@@ -10,7 +11,13 @@ const dateFormat = new Intl.DateTimeFormat('pl-PL', {
 })
 
 export function OrdersPage() {
-  const orders = useQuery({ queryKey: ['orders'], queryFn: api.orders, retry: false })
+  const [searchInput, setSearchInput] = useState('')
+  const [customerName, setCustomerName] = useState<string | undefined>()
+  const orders = useQuery({
+    queryKey: ['orders', customerName],
+    queryFn: () => api.orders(customerName),
+    retry: false,
+  })
   const modules = useQuery({ queryKey: ['modules'], queryFn: api.modules, retry: false })
   const nplusone = modules.data?.find((module) => module.name === 'nplusone')
   const moduleOff = orders.error instanceof ApiError && orders.error.status === 404
@@ -18,6 +25,17 @@ export function OrdersPage() {
   const metrics = orders.data?.metrics
   const expectedQueries =
     nplusone?.variant === 'vulnerable' ? `1 + ${orderData?.length ?? 'N'}` : '2'
+
+  function handleSearch(event: FormEvent) {
+    event.preventDefault()
+    const name = searchInput.trim()
+    setCustomerName(name || undefined)
+  }
+
+  function handleClear() {
+    setSearchInput('')
+    setCustomerName(undefined)
+  }
 
   return (
     <section className="card">
@@ -45,6 +63,30 @@ export function OrdersPage() {
             </p>
           )}
         </div>
+      )}
+
+      <form className="customer-search" onSubmit={handleSearch}>
+        <label>
+          Imię i nazwisko
+          <input
+            type="search"
+            value={searchInput}
+            onChange={(event) => setSearchInput(event.target.value)}
+            placeholder="np. Jan Kowalski"
+          />
+        </label>
+        <div className="form-actions">
+          <button type="submit">Szukaj</button>
+          <button type="button" className="button-secondary" onClick={handleClear}>
+            Wyczyść
+          </button>
+        </div>
+      </form>
+
+      {customerName && (
+        <p className="muted">
+          Filtrowanie: <strong>{customerName}</strong>
+        </p>
       )}
 
       {orders.isPending && <p className="muted">Ładowanie zamówień…</p>}

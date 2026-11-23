@@ -1,7 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState, type FormEvent } from 'react'
 
-import { api, ApiError, type CreateOrderResult } from '../api/client'
+import {
+  api,
+  ApiError,
+  type CreateOrderResult,
+  type CreateOrderResponse,
+} from '../api/client'
 import { VariantBadge } from '../components/VariantBadge'
 
 function newIdempotencyKey(): string {
@@ -18,6 +23,9 @@ export function ConcurrencyPage() {
   const [result, setResult] = useState<CreateOrderResult | null>(null)
   const [error, setError] = useState<Error | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [parallelResponses, setParallelResponses] = useState<CreateOrderResponse[]>([])
+  const [parallelElapsedMs, setParallelElapsedMs] = useState<number | null>(null)
+  const [isRunningParallel, setIsRunningParallel] = useState(false)
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
@@ -44,6 +52,54 @@ export function ConcurrencyPage() {
       setIsSubmitting(false)
     }
   }
+
+  async function handleParallelSubmit() {
+    setError(null)
+    setResult(null)
+    setParallelResponses([])
+    setParallelElapsedMs(null)
+    setIsRunningParallel(true)
+
+    const parallelKey = newIdempotencyKey()
+    setIdempotencyKey(parallelKey)
+    const payload = {
+      customer_name: customerName,
+      items: [{ product_id: Number(productId), quantity: Number(quantity) }],
+    }
+    const startedAt = performance.now()
+
+    try {
+      const responses = await Promise.all(
+        Array.from({ length: 8 }, () =>
+          api.createOrderWithResponse(payload, parallelKey),
+        ),
+      )
+      setParallelResponses(responses)
+      setParallelElapsedMs(performance.now() - startedAt)
+    } catch (requestError) {
+      setError(
+        requestError instanceof Error
+          ? requestError
+          : new Error('Nie udało się uruchomić równoległej demonstracji.'),
+      )
+    } finally {
+      setIsRunningParallel(false)
+    }
+  }
+
+  const uniqueOrderIds = [
+    ...new Set(parallelResponses.map((response) => response.result.order.id)),
+  ]
+  const createdCount = parallelResponses.filter(
+    (response) => response.result.created,
+  ).length
+  const reusedCount = parallelResponses.length - createdCount
+  const status201Count = parallelResponses.filter(
+    (response) => response.status === 201,
+  ).length
+  const status200Count = parallelResponses.filter(
+    (response) => response.status === 200,
+  ).length
 
   const moduleOff = error instanceof ApiError && error.status === 404
 
@@ -116,6 +172,14 @@ export function ConcurrencyPage() {
           <button type="button" className="button-secondary" onClick={() => setIdempotencyKey(newIdempotencyKey())}>
             Nowy klucz
           </button>
+          <button
+            type="button"
+            className="button-secondary"
+            onClick={handleParallelSubmit}
+            disabled={isRunningParallel}
+          >
+            {isRunningParallel ? 'Wysyłanie 8 requestów…' : 'Wyślij 8 razy równolegle'}
+          </button>
         </div>
       </form>
 
@@ -129,6 +193,27 @@ export function ConcurrencyPage() {
           </p>
           <p className="muted">
             Pole <code>created</code>: <code>{String(result.created)}</code>
+          </p>
+        </div>
+      )}
+
+      {parallelResponses.length > 0 && (
+        <div className="parallel-result">
+          <strong>Wynik 8 równoległych requestów</strong>
+          {parallelElapsedMs !== null && (
+            <p className="muted">
+              Czas wykonania: <code>{parallelElapsedMs.toFixed(2)} ms</code>
+            </p>
+          )}
+          <ul className="parallel-summary">
+            <li>Unikalne zamówienia: <code>{uniqueOrderIds.length}</code></li>
+            <li>Odpowiedzi 201: <code>{status201Count}</code></li>
+            <li>Odpowiedzi 200: <code>{status200Count}</code></li>
+            <li><code>created: true</code>: <code>{createdCount}</code></li>
+            <li><code>created: false</code>: <code>{reusedCount}</code></li>
+          </ul>
+          <p className="muted">
+            ID zamówień: <code>{uniqueOrderIds.join(', ')}</code>
           </p>
         </div>
       )}

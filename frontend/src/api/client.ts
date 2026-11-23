@@ -86,6 +86,11 @@ export interface CreateOrderResult {
   created: boolean
 }
 
+export interface CreateOrderResponse {
+  result: CreateOrderResult
+  status: number
+}
+
 export interface ResourceDemoResult {
   resource_type: 'file' | 'socket'
   opened_count: number
@@ -153,8 +158,11 @@ export const api = {
   modules: () => request<ModuleInfo[]>('/modules'),
   searchProducts: (q: string) =>
     request<Product[]>(`/products/search?${new URLSearchParams({ q })}`),
-  orders: async (): Promise<OrdersResult> => {
-    const response = await fetch('/api/orders')
+  orders: async (customerName?: string): Promise<OrdersResult> => {
+    const query = customerName
+      ? `?${new URLSearchParams({ customer_name: customerName })}`
+      : ''
+    const response = await fetch(`/api/orders${query}`)
     const body: unknown = await response.json().catch(() => null)
     if (!response.ok) {
       throw new ApiError(response.status, describeError(body) ?? response.statusText)
@@ -184,6 +192,27 @@ export const api = {
       throw new ApiError(response.status, describeError(body) ?? response.statusText)
     }
     return body as CreateOrderResult
+  },
+  createOrderWithResponse: async (
+    payload: OrderRequest,
+    idempotencyKey: string,
+  ): Promise<CreateOrderResponse> => {
+    const response = await fetch('/api/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Idempotency-Key': idempotencyKey,
+      },
+      body: JSON.stringify(payload),
+    })
+    const body: unknown = await response.json().catch(() => null)
+    if (!response.ok) {
+      throw new ApiError(response.status, describeError(body) ?? response.statusText)
+    }
+    return {
+      result: body as CreateOrderResult,
+      status: response.status,
+    }
   },
   login: (username: string, password: string) =>
     post<LoginResult>('/login', { username, password }),

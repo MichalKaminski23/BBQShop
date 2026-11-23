@@ -12,7 +12,10 @@ class SecureOrderRepository:
     def __init__(self, session: AsyncSession) -> None:
         self._session = session
 
-    async def list_orders(self) -> list[OrderOut]:
-        stmt = select(Order).options(selectinload(Order.items)).order_by(Order.id)
+    async def list_orders(self, customer_name: str | None = None) -> list[OrderOut]:
+        stmt = select(Order).options(selectinload(Order.items))
+        if customer_name is not None:
+            stmt = stmt.where(Order.customer_name == customer_name)
+        stmt = stmt.order_by(Order.id)
         orders = await self._session.scalars(stmt)
         return [OrderOut.model_validate(order) for order in orders]

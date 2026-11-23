@@ -111,3 +111,33 @@ Semafor jest ograniczeniem lokalnym dla jednego procesu aplikacji. W
 środowisku wieloprocesowym lub po uruchomieniu wielu instancji nie zastępuje
 mechanizmu opartego o bazę danych. Dlatego najważniejszym zabezpieczeniem
 jest trwały, unikalny klucz idempotencji.
+
+## Skrypt demonstracyjny Python
+
+Skrypt sam odczyta aktywny wariant z `/api/modules` i wyśle 8 równoległych
+requestów z tym samym `Idempotency-Key`:
+
+```powershell
+uv run python scripts/concurrency_demo.py
+```
+
+Dostępne opcje:
+
+```powershell
+uv run python scripts/concurrency_demo.py --count 8
+uv run python scripts/concurrency_demo.py --customer-name "Jan Kowalski"
+uv run python scripts/concurrency_demo.py --product-id 1 --quantity 2
+```
+
+Oczekiwane wyniki:
+
+```text
+vulnerable: liczba unikalnych zamówień równa liczbie requestów
+secure:     jedno unikalne zamówienie
+```
+
+Raport jest zapisany automatycznie do:
+
+```text
+scripts/reports/concurrency-<wariant>-<czas>.txt
+```
