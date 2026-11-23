@@ -153,8 +153,11 @@ export const api = {
   modules: () => request<ModuleInfo[]>('/modules'),
   searchProducts: (q: string) =>
     request<Product[]>(`/products/search?${new URLSearchParams({ q })}`),
-  orders: async (): Promise<OrdersResult> => {
-    const response = await fetch('/api/orders')
+  orders: async (customerName?: string): Promise<OrdersResult> => {
+    const query = customerName
+      ? `?${new URLSearchParams({ customer_name: customerName })}`
+      : ''
+    const response = await fetch(`/api/orders${query}`)
     const body: unknown = await response.json().catch(() => null)
     if (!response.ok) {
       throw new ApiError(response.status, describeError(body) ?? response.statusText)

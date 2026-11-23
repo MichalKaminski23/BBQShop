@@ -142,6 +142,61 @@ W wariancie podatnym zobaczysz powtarzające się zapytania do
 `order_items` z różnymi identyfikatorami zamówień. W wariancie poprawionym
 zobaczysz jedno zapytanie z warunkiem `IN (...)`.
 
+## Skrypt demonstracyjny Python
+
+Uruchom go ręcznie dla aktualnie ustawionego wariantu.
+
+Najpierw ustaw:
+
+```dotenv
+BBQ_MODULE_NPLUSONE=vulnerable
+BBQ_DB_METRICS=true
+```
+
+Przeładuj API i uruchom:
+
+```powershell
+docker compose up -d --force-recreate api
+uv run python scripts/nplusone_demo.py
+```
+
+Po demonstracji podatności ustaw `BBQ_MODULE_NPLUSONE=secure`, przeładuj API
+i uruchom ponownie:
+
+```powershell
+docker compose up -d --force-recreate api
+uv run python scripts/nplusone_demo.py
+```
+
+Skrypt nie zmienia `.env` ani nie restartuje innych usług. Sprawdza aktywny
+wariant `/api/modules`, a wynik czyta z `/api/orders` i nagłówków SQL.
+Domyślnie pokazuje pięć pierwszych zamówień z pozycjami; liczbę można zmienić
+argumentem `--limit`:
+
+```powershell
+uv run python scripts/nplusone_demo.py --limit 10
+```
+
+Do demonstracji zamówień konkretnego klienta:
+
+```powershell
+uv run python scripts/nplusone_demo.py --customer-name "Jan Kowalski"
+```
+
+Skrypt wysyła żądanie:
+
+```text
+GET /api/orders?customer_name=Jan%20Kowalski
+```
+
+Po wykonaniu skrypt zapisuje raport z metrykami, zamówieniami i nowymi liniami
+logów SQL. Domyślnie trafia do:
+
+```text
+scripts/reports/nplusone-<wariant>-<czas>.txt
+```
+
+
 ## Automatyczna weryfikacja
 
 ```powershell

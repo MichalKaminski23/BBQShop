@@ -16,6 +16,8 @@ fileio-data/
 node_modules/
 frontend/dist/
 
+scripts/reports/
+
 .idea/
 .vscode/
 .DS_Store

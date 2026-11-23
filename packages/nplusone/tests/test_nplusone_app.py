@@ -54,3 +54,15 @@ async def test_orders_include_query_metrics(
     assert response.status_code == 200
     assert response.headers["X-SQL-Query-Count"] == str(expected_queries)
     assert float(response.headers["X-SQL-Query-Time-Ms"]) >= 0
+
+
+async def test_orders_can_be_filtered_by_customer(client_for: ClientFactory) -> None:
+    customer_name = ORDERS[0][0]
+    async with client_for(Variant.SECURE) as client:
+        response = await client.get(
+            "/api/orders",
+            params={"customer_name": customer_name},
+        )
+
+    assert response.status_code == 200
+    assert all(order["customer_name"] == customer_name for order in response.json())

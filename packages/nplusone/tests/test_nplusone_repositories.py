@@ -52,6 +52,16 @@ async def test_list_orders_returns_items(
     assert all(order.items for order in orders)
 
 
+@BOTH
+async def test_list_orders_filters_by_customer(
+    db_session: AsyncSession, repository_cls: type[OrderRepository]
+) -> None:
+    customer_name = ORDERS[0][0]
+    orders = await repository_cls(db_session).list_orders(customer_name)
+
+    assert all(order.customer_name == customer_name for order in orders)
+
+
 async def test_secure_variant_uses_two_queries(
     db_session: AsyncSession, pg_engine: AsyncEngine
 ) -> None:

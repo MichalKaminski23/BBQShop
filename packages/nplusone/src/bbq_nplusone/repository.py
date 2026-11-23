@@ -10,6 +10,6 @@ from bbq_nplusone.schemas import OrderOut
 class OrderRepository(Protocol):
     def __init__(self, session: AsyncSession) -> None: ...
 
-    async def list_orders(self) -> list[OrderOut]:
-        """Zwraca zamówienia razem z ich pozycjami."""
+    async def list_orders(self, customer_name: str | None = None) -> list[OrderOut]:
+        """Zwraca zamówienia, opcjonalnie filtrowane po kliencie."""
         ...
