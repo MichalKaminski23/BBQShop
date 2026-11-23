@@ -72,7 +72,9 @@ def wait_for_api(base_url: str) -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Pokazuje liczbę zapytań SQL dla aktualnego wariantu N+1.")
+    parser = argparse.ArgumentParser(
+        description="Pokazuje liczbę zapytań SQL dla aktualnego wariantu N+1."
+    )
     parser.add_argument(
         "--base-url",
         default="http://localhost:8000",
@@ -101,7 +103,11 @@ def main() -> None:
         raise RuntimeError("Niepoprawna odpowiedź /api/modules")
 
     active = next(
-        (module for module in modules if isinstance(module, dict) and module.get("name") == "nplusone"),
+        (
+            module
+            for module in modules
+            if isinstance(module, dict) and module.get("name") == "nplusone"
+        ),
         None,
     )
     actual_variant = active.get("variant") if active is not None else None
@@ -146,7 +152,11 @@ def main() -> None:
         if not isinstance(order, dict):
             continue
 
-        print(f"- #{order.get('id')} | " f"{order.get('customer_name')} | " f"utworzono: {order.get('created_at')}")
+        print(
+            f"- #{order.get('id')} | "
+            f"{order.get('customer_name')} | "
+            f"utworzono: {order.get('created_at')}"
+        )
         items = order.get("items")
         if not isinstance(items, list):
             continue
@@ -196,7 +206,8 @@ def main() -> None:
         if not isinstance(order, dict):
             continue
         report_lines.append(
-            f"- #{order.get('id')} | {order.get('customer_name')} " f"| utworzono: {order.get('created_at')}"
+            f"- #{order.get('id')} | {order.get('customer_name')} "
+            f"| utworzono: {order.get('created_at')}"
         )
         items = order.get("items")
         if not isinstance(items, list):

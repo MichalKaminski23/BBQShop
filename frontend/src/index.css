@@ -305,6 +305,29 @@ code {
   background: var(--off-bg);
 }
 
+.parallel-result {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.parallel-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.parallel-summary li {
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  background: var(--bg);
+}
+
 .status-list,
 .module-list,
 .product-grid {
